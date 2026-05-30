@@ -69,8 +69,11 @@ jobs:
             exit 1
           fi
           mkdir -p site
+          # --short: skip the short-password warning + its interactive [y/N]
+          # prompt (which would hang in CI). Fine here: fictional-data POC.
           npx -y staticrypt dashboard.html \
             -p "$STATICRYPT_PASSWORD" \
+            --short \
             -d site
           # Pages serves index.html as the entry point.
           mv site/dashboard.html site/index.html
