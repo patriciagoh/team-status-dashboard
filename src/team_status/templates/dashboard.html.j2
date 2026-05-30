@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ team_name }} — Working On Now</title>
+<style>
+  :root{--plan:#2563eb;--unp:#d97706;--inc:#dc2626;--sup:#7c3aed;--help:#0d9488;--lent:#4f46e5;--none:#9ca3af;}
+  body{font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;color:#111827;margin:0;background:#f9fafb;}
+  header{padding:18px 24px;background:#fff;border-bottom:1px solid #e5e7eb;}
+  h1{font-size:18px;margin:0 0 4px;}
+  .meta{color:#6b7280;font-size:12px;}
+  .summary{margin-top:8px;font-weight:600;}
+  .slack{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:10px;font-size:11px;
+         background:{{ '#dcfce7' if slack_connected else '#fee2e2' }};
+         color:{{ '#166534' if slack_connected else '#991b1b' }};}
+  .filters{padding:10px 24px;background:#fff;border-bottom:1px solid #e5e7eb;}
+  .chip{cursor:pointer;border:1px solid #d1d5db;border-radius:14px;padding:3px 10px;margin-right:6px;
+        font-size:12px;background:#fff;}
+  .chip.active{background:#111827;color:#fff;border-color:#111827;}
+  table{width:100%;border-collapse:collapse;background:#fff;}
+  th,td{text-align:left;padding:9px 24px;border-bottom:1px solid #f0f0f0;vertical-align:top;}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#6b7280;}
+  .badge{display:inline-block;padding:2px 9px;border-radius:11px;font-size:11px;font-weight:600;color:#fff;}
+  .low{opacity:.55;}
+  .chg{color:#dc2626;font-weight:600;font-size:13px;}
+  .same{color:#9ca3af;font-size:13px;}
+  .tag{font-size:11px;color:#6b7280;}
+  .corrected{font-size:11px;color:#7c3aed;}
+  .more{font-size:12px;color:#6b7280;}
+</style></head><body>
+<header>
+  <h1>{{ team_name }} — what everyone's working on</h1>
+  <div class="meta">Snapshot: {{ captured_at }}
+    <span class="slack">Slack: {{ 'connected' if slack_connected else 'not connected' }}</span></div>
+  {% if summary %}<div class="summary">{{ summary }}</div>{% endif %}
+</header>
+<div class="filters">
+  <span class="chip active" data-why="all" onclick="filt(this)">All</span>
+  {% for key,label in [('planned','Planned'),('unplanned','Unplanned'),('incident','Incident'),('support','Support'),('lent','Lent out'),('adhoc','Ad-hoc')] %}
+  <span class="chip" data-why="{{key}}" onclick="filt(this)">{{label}}</span>
+  {% endfor %}
+</div>
+<table><thead><tr><th>Person</th><th>Working on now</th><th>Why</th><th>Since last snapshot</th></tr></thead><tbody>
+{% for row in rows %}
+{% set why = row.primary.why if row.primary else 'none' %}
+<tr data-why="{{ why }}">
+  <td>{{ row.member_name | abbrev }}{% if row.corrected %}<div class="corrected">✎ adjusted by {{ row.corrected_by | abbrev }}</div>{% endif %}</td>
+  <td>
+    {% if row.primary %}
+      {% if row.primary.issue_identifier %}<b>{{ row.primary.issue_identifier }}</b> {% endif %}{{ row.primary.title }}
+      {% for t in row.primary.tags %}<div class="tag">· {{ t }}</div>{% endfor %}
+      {% if row.others %}<div class="more">+{{ row.others|length }} more</div>{% endif %}
+    {% else %}<span class="same">No tracked activity</span>{% endif %}
+  </td>
+  <td>{% if row.primary %}<span class="badge {{ ('low' if row.primary.confidence=='low' else '') }}"
+        style="background:var(--{{ {'planned':'plan','unplanned':'unp','incident':'inc','support':'sup','adhoc':'help','lent':'lent','none':'none'}[why] }})">
+        {{ {'planned':'Planned','unplanned':'Unplanned','incident':'Incident','support':'Support','adhoc':'Ad-hoc','lent':'Lent out','none':'—'}[why] }}</span>{% endif %}</td>
+  <td>{% set n = notes.get(row.member_id) %}
+    {% if n and n.kind in ['no_change','baseline'] %}<span class="same">{{ n.text }}</span>
+    {% elif n %}<span class="chg">{{ n.text }}</span>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody></table>
+<script>
+function filt(el){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  var w=el.getAttribute('data-why');
+  document.querySelectorAll('tbody tr').forEach(function(tr){
+    tr.style.display=(w==='all'||tr.getAttribute('data-why')===w)?'':'none';
+  });
+}
+</script>
+</body></html>

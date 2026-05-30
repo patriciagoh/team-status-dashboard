@@ -1,0 +1,26 @@
+{
+  "data": {
+    "team": {
+      "id": "t1",
+      "name": "Platform",
+      "activeCycle": {"id": "c1", "name": "Q2 - Sprint 3", "startsAt": "2026-05-25T04:00:00.000Z"},
+      "members": {"nodes": [
+        {"id": "m1", "name": "Alex Rivera", "email": "alex.rivera@example.com", "active": true},
+        {"id": "m2", "name": "Sam Okafor", "email": "sam.okafor@example.com", "active": true}
+      ]}
+    },
+    "issues": {"nodes": [
+      {"id": "i1", "identifier": "MEX-412", "title": "Rich link previews",
+       "createdAt": "2026-05-26T10:00:00.000Z", "updatedAt": "2026-05-29T12:00:00.000Z",
+       "assignee": {"id": "m1"}, "state": {"name": "In Progress", "type": "started"},
+       "team": {"id": "t1", "key": "MEX", "name": "Platform"},
+       "cycle": {"id": "c1", "startsAt": "2026-05-25T04:00:00.000Z"},
+       "labels": {"nodes": [{"name": "frontend"}]}, "project": null},
+      {"id": "i2", "identifier": "INC-88", "title": "Webhook retries failing",
+       "createdAt": "2026-05-29T08:00:00.000Z", "updatedAt": "2026-05-29T11:30:00.000Z",
+       "assignee": {"id": "m2"}, "state": {"name": "In Progress", "type": "started"},
+       "team": {"id": "t1", "key": "MEX", "name": "Platform"},
+       "cycle": null, "labels": {"nodes": [{"name": "incident"}]}, "project": null}
+    ]}
+  }
+}

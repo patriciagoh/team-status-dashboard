@@ -1,0 +1,12 @@
+{
+  "teams": [
+    {
+      "name": "Platform",
+      "linear_team_id": "demo-team-0001",
+      "members": "auto"
+    }
+  ],
+  "recently_touched_hours": 24,
+  "incident_labels": ["incident", "sev1", "sev2", "sev3", "outage"],
+  "support_labels": ["support", "customer", "escalation"]
+}

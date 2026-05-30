@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.ada.teamstatus</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__PROJECT__/.venv/bin/python</string>
+    <string>-m</string><string>team_status.cli</string>
+    <string>--config</string><string>__PROJECT__/config.json</string>
+    <string>--snapshots</string><string>__PROJECT__/snapshots</string>
+    <string>--corrections</string><string>__PROJECT__/corrections.json</string>
+    <string>--out</string><string>__PROJECT__/dashboard.html</string>
+  </array>
+  <key>WorkingDirectory</key><string>__PROJECT__</string>
+  <key>EnvironmentVariables</key><dict>
+    <key>LINEAR_API_KEY</key><string>__LINEAR_API_KEY__</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Hour</key><integer>9</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Hour</key><integer>14</integer><key>Minute</key><integer>0</integer></dict>
+  </array>
+  <key>StandardOutPath</key><string>__PROJECT__/snapshots/launchd.log</string>
+  <key>StandardErrorPath</key><string>__PROJECT__/snapshots/launchd.err</string>
+</dict></plist>

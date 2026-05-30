@@ -1,0 +1,22 @@
+[project]
+name = "team-status"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["httpx>=0.27", "jinja2>=3.1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+team_status = ["templates/*.j2"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

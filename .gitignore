@@ -1,0 +1,9 @@
+.superpowers/
+snapshots/
+corrections.json
+*.pyc
+__pycache__/
+.venv/
+*.egg-info/
+dashboard.html
+.staticrypt.json
