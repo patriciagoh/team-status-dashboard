@@ -42,7 +42,7 @@ team-status-dashboard/
 │   ├── test_render.py
 │   └── test_cli.py
 ├── scripts/
-│   ├── com.ada.teamstatus.plist        # launchd template
+│   ├── com.teamstatus.dashboard.plist        # launchd template
 │   └── setup-schedule.sh
 └── snapshots/                          # gitignored, created at runtime
 ```
@@ -1482,17 +1482,17 @@ git commit -m "chore: verify engine against live Linear; confirm MEX membership"
 ## Task 11: Scheduling via launchd
 
 **Files:**
-- Create: `scripts/com.ada.teamstatus.plist`
+- Create: `scripts/com.teamstatus.dashboard.plist`
 - Create: `scripts/setup-schedule.sh`
 
 - [ ] **Step 1: Create the launchd plist template**
 
 ```xml
-<!-- scripts/com.ada.teamstatus.plist -->
+<!-- scripts/com.teamstatus.dashboard.plist -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-  <key>Label</key><string>com.ada.teamstatus</string>
+  <key>Label</key><string>com.teamstatus.dashboard</string>
   <key>ProgramArguments</key>
   <array>
     <string>__PROJECT__/.venv/bin/python</string>
@@ -1524,16 +1524,16 @@ git commit -m "chore: verify engine against live Linear; confirm MEX membership"
 set -euo pipefail
 PROJECT="$(cd "$(dirname "$0")/.." && pwd)"
 : "${LINEAR_API_KEY:?Set LINEAR_API_KEY in your environment first}"
-DEST="$HOME/Library/LaunchAgents/com.ada.teamstatus.plist"
+DEST="$HOME/Library/LaunchAgents/com.teamstatus.dashboard.plist"
 
 sed -e "s|__PROJECT__|$PROJECT|g" \
     -e "s|__LINEAR_API_KEY__|$LINEAR_API_KEY|g" \
-    "$PROJECT/scripts/com.ada.teamstatus.plist" > "$DEST"
+    "$PROJECT/scripts/com.teamstatus.dashboard.plist" > "$DEST"
 
 launchctl unload "$DEST" 2>/dev/null || true
 launchctl load "$DEST"
 echo "Installed. Runs daily at 09:00 and 14:00. Dashboard: $PROJECT/dashboard.html"
-echo "Test now with: launchctl start com.ada.teamstatus"
+echo "Test now with: launchctl start com.teamstatus.dashboard"
 ```
 
 - [ ] **Step 3: Make executable and verify syntax**
@@ -1551,7 +1551,7 @@ Run:
 ```bash
 export LINEAR_API_KEY="lin_api_..."   # if not already set
 ./scripts/setup-schedule.sh
-launchctl start com.ada.teamstatus
+launchctl start com.teamstatus.dashboard
 sleep 5 && cat snapshots/launchd.log
 ```
 Expected: log shows the summary + "Wrote ...dashboard.html"; a new snapshot file exists.
@@ -1559,7 +1559,7 @@ Expected: log shows the summary + "Wrote ...dashboard.html"; a new snapshot file
 - [ ] **Step 5: Commit**
 
 ```bash
-git add scripts/com.ada.teamstatus.plist scripts/setup-schedule.sh
+git add scripts/com.teamstatus.dashboard.plist scripts/setup-schedule.sh
 git commit -m "feat: add launchd 9am/2pm scheduling + setup script"
 ```
 
