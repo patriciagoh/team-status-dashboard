@@ -51,3 +51,13 @@ def test_render_shows_no_tracked_activity_for_empty_row():
     html = render_dashboard("MEX", "2026-05-29T14:00:00Z", "", rows, notes, True)
     assert "No tracked activity" in html
     assert "Slack: connected" in html
+
+
+def test_render_includes_ideas_section():
+    from team_status.render import IDEAS
+    html = render_dashboard("Platform", "2026-05-31T14:00:00Z", "",
+                            rows=[], notes={}, slack_connected=False)
+    assert len(IDEAS) == 10
+    assert "Ideas — ways to build this out (10)" in html
+    assert "Activate the Slack signal" in html        # first idea
+    assert "Load &amp; context-switch flags" in html  # last idea (HTML-escaped &)

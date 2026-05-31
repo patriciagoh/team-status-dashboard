@@ -60,6 +60,26 @@
 </tr>
 {% endfor %}
 </tbody></table>
+
+<style>
+  .ideas{margin:18px 24px 32px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;}
+  .ideas>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px;list-style:none;}
+  .ideas>summary::-webkit-details-marker{display:none;}
+  .ideas>summary::before{content:"💡 ";}
+  .ideas ol{margin:0;padding:4px 16px 16px 40px;}
+  .ideas li{margin:8px 0;}
+  .ideas .it{font-weight:600;}
+  .ideas .id{color:#6b7280;}
+</style>
+<details class="ideas">
+  <summary>Ideas — ways to build this out ({{ ideas|length }})</summary>
+  <ol>
+  {% for title, desc in ideas %}
+    <li><span class="it">{{ title }}</span> — <span class="id">{{ desc }}</span></li>
+  {% endfor %}
+  </ol>
+</details>
+
 <script>
 function filt(el){
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
