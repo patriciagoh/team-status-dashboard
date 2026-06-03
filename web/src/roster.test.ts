@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { derive } from "./roster";
-import type { RosterData } from "./types";
+import type { RosterData, Person } from "./types";
 
-function person(cat: RosterData["teams"][0]["people"][0]["cat"], since: string | null = null) {
+function person(cat: Person["cat"], since: string | null = null): Person {
   return {
-    name: "X Y", initials: "XY", role: "Eng", team: "T", cat, conf: "high" as const,
+    name: "X Y", initials: "XY", role: "Eng", team: "T", cat, conf: "high",
     what: "w", ticket: null, since, detail: { tickets: [], note: "" },
   };
 }
@@ -18,6 +18,14 @@ const data: RosterData = {
 };
 
 describe("derive", () => {
+  it("empty roster returns zeroed totals", () => {
+    const empty = derive({ teams: [], snapshot: data.snapshot });
+    expect(empty.total).toBe(0);
+    expect(empty.offPlan).toBe(0);
+    expect(empty.firefighting).toBe(0);
+    expect(empty.teams).toEqual([]);
+  });
+
   const d = derive(data);
 
   it("counts total people", () => expect(d.total).toBe(6));
@@ -25,6 +33,8 @@ describe("derive", () => {
     expect(d.counts.planned).toBe(2);
     expect(d.counts.incident).toBe(1);
     expect(d.counts.unplanned).toBe(1);
+    expect(d.counts.support).toBe(1);
+    expect(d.counts.lent).toBe(1);
   });
   it("onPlan = planned count", () => expect(d.onPlan).toBe(2));
   it("offPlan = incident + unplanned", () => expect(d.offPlan).toBe(2));

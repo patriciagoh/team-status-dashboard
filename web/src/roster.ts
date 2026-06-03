@@ -27,6 +27,10 @@ function emptyCounts(): Record<Category, number> {
   return { planned: 0, adhoc: 0, lent: 0, support: 0, unplanned: 0, incident: 0 };
 }
 
+function sumOffPlan(c: Record<Category, number>): number {
+  return OFF_PLAN.reduce((sum, k) => sum + c[k], 0);
+}
+
 export function derive(data: RosterData): Derived {
   const all: Person[] = data.teams.flatMap((t) => t.people);
   const counts = emptyCounts();
@@ -38,7 +42,7 @@ export function derive(data: RosterData): Derived {
     const tally: TallyItem[] = CAT_ORDER
       .filter((k) => tc[k] > 0)
       .map((k) => ({ key: k, label: CATEGORIES[k].label, count: tc[k] }));
-    const offPlan = t.people.filter((p) => OFF_PLAN.includes(p.cat)).length;
+    const offPlan = sumOffPlan(tc);
     return { name: t.name, headcount: t.people.length, people: t.people, tally, offPlan };
   });
 
@@ -47,7 +51,7 @@ export function derive(data: RosterData): Derived {
     counts,
     total: all.length,
     onPlan: counts.planned,
-    offPlan: counts.incident + counts.unplanned,
+    offPlan: sumOffPlan(counts),
     firefighting: counts.incident,
     changed: all.filter((p) => p.since).length,
     catOrder: CAT_ORDER,
