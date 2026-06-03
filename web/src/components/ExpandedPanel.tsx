@@ -1,9 +1,9 @@
 import type { Person } from "../types";
 
-export function ExpandedPanel({ person }: { person: Person }) {
+export function ExpandedPanel({ person, id }: { person: Person; id?: string }) {
   const first = person.name.split(" ")[0];
   return (
-    <div className="px-[14px] pt-[4px] pb-[18px] pl-[52px] bg-oat">
+    <div id={id} className="px-[14px] pt-[4px] pb-[18px] pl-[52px] bg-oat">
       <div className="grid grid-cols-2 gap-[24px] bg-paper border border-line rounded-sm px-[18px] py-[15px]">
         <div>
           <div className="font-sans font-semibold text-[10px] leading-none tracking-[0.13em] uppercase text-muted mb-[10px]">

@@ -9,11 +9,13 @@ import { ROSTER_GRID } from "./rosterGrid";
 
 export function PersonRow({ person, idx, last }: { person: Person; idx: number; last: boolean }) {
   const [open, setOpen] = useState(false);
+  const panelId = `person-panel-${person.name.replace(/\s+/g, "-").replace(/[^\w-]/g, "")}`;
   return (
     <div className="overflow-hidden" style={{ borderBottom: last && !open ? "none" : "1px solid var(--line)" }}>
       <button
         type="button"
         aria-expanded={open}
+        aria-controls={panelId}
         onClick={() => setOpen((o) => !o)}
         className={`tsd-row tsd-focus w-full text-left grid ${ROSTER_GRID} items-center px-[16px] py-[11px] cursor-pointer bg-transparent border-0`}
         style={open ? { background: "var(--row-open-bg)" } : undefined}
@@ -34,7 +36,7 @@ export function PersonRow({ person, idx, last }: { person: Person; idx: number; 
           <span className="tsd-arr font-mono text-[13px] leading-none text-matcha-deep shrink-0" aria-hidden="true">{open ? "⌄" : "→"}</span>
         </span>
       </button>
-      {open && <ExpandedPanel person={person} />}
+      {open && <ExpandedPanel person={person} id={panelId} />}
     </div>
   );
 }
