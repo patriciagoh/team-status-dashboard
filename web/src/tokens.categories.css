@@ -7,7 +7,7 @@
    ============================================================ */
 :root {
   /* Rust — the urgent / incident signal (matcha-oat core has --bad*; we name it rust here) */
-  --rust: #C0533A;
+  --rust: #C0533A; /* same hex as matcha-oat --bad-border, but kept separate: rust is a color family/signal, not a pass/fail status */
   --rust-deep: #9A3D29;          /* incident text — AA on --rust-tint */
   --rust-tint: #F6E2DA;
   --rust-tint-border: #EBC9BD;
@@ -25,16 +25,18 @@
   --cat-adhoc-bg: var(--paper);             --cat-adhoc-text: var(--ink-2);             --cat-adhoc-border: var(--line-2);
   --cat-lent-bg: #F1EFE9;                   --cat-lent-text: var(--ink-2);              --cat-lent-border: var(--line-2);
   --cat-support-bg: #EDEADD;                --cat-support-text: #6C6647;                --cat-support-border: #DCD6C3;
-  --cat-unplanned-bg: var(--yolk-tint);     --cat-unplanned-text: var(--yolk-tint-text);--cat-unplanned-border: #EAD9AE;
+  --cat-unplanned-bg: var(--yolk-tint);     --cat-unplanned-text: var(--yolk-tint-text);--cat-unplanned-border: #EAD9AE; /* darker yolk-tint border — no upstream alias */
   --cat-incident-bg: var(--rust-tint);      --cat-incident-text: var(--rust-deep);      --cat-incident-border: var(--rust-tint-border);
 }
 
+/* rgba is rgb(--matcha #6E8B57) at low alpha — box-shadow keyframes can't interpolate a var() with alpha. If --matcha changes upstream, update this. */
 /* Ambient snapshot pulse (rgba, not hex). Gated for reduced motion. */
 @keyframes tsd-pulse {
   0%   { box-shadow: 0 0 0 0 rgba(110, 139, 87, 0.30); }
   70%  { box-shadow: 0 0 0 9px rgba(110, 139, 87, 0); }
   100% { box-shadow: 0 0 0 0 rgba(110, 139, 87, 0); }
 }
+/* .tsd-pulse is an intentional exception: a component rule kept here because @keyframes must live in the same file. This file otherwise holds only tokens. */
 .tsd-pulse { animation: tsd-pulse 2s ease-out infinite; }
 @media (prefers-reduced-motion: reduce) {
   .tsd-pulse { animation: none; }
