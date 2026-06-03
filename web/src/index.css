@@ -8,3 +8,23 @@ body {
   color: var(--ink);
   font-family: var(--sans);
 }
+
+@layer components {
+  .tsd-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    border-radius: var(--r-pill);
+    padding: 5px 13px 5px 11px;
+    font: 700 12px/1.4 var(--mono);
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .tsd-chip[data-cat="planned"]   { background: var(--cat-planned-bg);   color: var(--cat-planned-text);   border-color: var(--cat-planned-border); }
+  .tsd-chip[data-cat="adhoc"]     { background: var(--cat-adhoc-bg);     color: var(--cat-adhoc-text);     border-color: var(--cat-adhoc-border); }
+  .tsd-chip[data-cat="lent"]      { background: var(--cat-lent-bg);      color: var(--cat-lent-text);      border-color: var(--cat-lent-border); }
+  .tsd-chip[data-cat="support"]   { background: var(--cat-support-bg);   color: var(--cat-support-text);   border-color: var(--cat-support-border); }
+  .tsd-chip[data-cat="unplanned"] { background: var(--cat-unplanned-bg); color: var(--cat-unplanned-text); border-color: var(--cat-unplanned-border); }
+  .tsd-chip[data-cat="incident"]  { background: var(--cat-incident-bg);  color: var(--cat-incident-text);  border-color: var(--cat-incident-border); }
+
+  /* focus ring honoring matcha-oat focus token */
+  .tsd-focus:focus-visible { outline: var(--focus); outline-offset: var(--focus-offset); }
+}
