@@ -14,6 +14,9 @@ describe("accessibility", () => {
     expect(screen.getAllByText("Planned").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Incident").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Support").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Ad-hoc").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Lent-out").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Unplanned").length).toBeGreaterThan(0);
   });
 
   it("person rows are keyboard-operable buttons", async () => {
