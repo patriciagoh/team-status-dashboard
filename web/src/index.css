@@ -30,6 +30,7 @@ body {
 
   .tsd-row { transition: transform var(--dur-row), background var(--dur-row); }
   .tsd-arr { opacity: 0; transition: opacity var(--dur-base); }
+  /* rgba is rgb(--yolk #E8B23C) at low alpha — gradient stops can't interpolate var() with alpha. If --yolk changes upstream, update this. */
   .tsd-row:hover:not([aria-expanded="true"]) {
     background: linear-gradient(90deg, rgba(232, 178, 60, 0.16), rgba(232, 178, 60, 0) 60%);
     transform: translateX(5px);

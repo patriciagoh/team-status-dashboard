@@ -5,8 +5,7 @@ import { CategoryChip } from "./CategoryChip";
 import { SinceNote } from "./SinceNote";
 import { WorkingOn } from "./WorkingOn";
 import { ExpandedPanel } from "./ExpandedPanel";
-
-const GRID = "grid-cols-[34px_196px_1fr_132px_150px_86px] gap-[16px]";
+import { ROSTER_GRID } from "./rosterGrid";
 
 export function PersonRow({ person, idx, last }: { person: Person; idx: number; last: boolean }) {
   const [open, setOpen] = useState(false);
@@ -16,7 +15,7 @@ export function PersonRow({ person, idx, last }: { person: Person; idx: number; 
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className={`tsd-row tsd-focus w-full text-left grid ${GRID} items-center px-[16px] py-[11px] cursor-pointer bg-transparent border-0`}
+        className={`tsd-row tsd-focus w-full text-left grid ${ROSTER_GRID} items-center px-[16px] py-[11px] cursor-pointer bg-transparent border-0`}
         style={open ? { background: "var(--row-open-bg)" } : undefined}
       >
         <span className="font-mono text-[12.5px] leading-none text-muted tabular-nums">

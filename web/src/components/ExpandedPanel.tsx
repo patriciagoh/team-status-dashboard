@@ -10,8 +10,8 @@ export function ExpandedPanel({ person }: { person: Person }) {
             Open items
           </div>
           <div className="flex flex-col gap-[7px]">
-            {person.detail.tickets.map((t, i) => (
-              <div key={i} className="flex items-center gap-[9px]">
+            {person.detail.tickets.map((t) => (
+              <div key={t} className="flex items-center gap-[9px]">
                 <span className="w-[4px] h-[4px] rounded-full shrink-0" style={{ background: "var(--matcha)" }} aria-hidden="true" />
                 <span className="font-mono text-[13px] leading-[1.4] text-ink-2">{t}</span>
               </div>
@@ -32,6 +32,7 @@ export function ExpandedPanel({ person }: { person: Person }) {
               </span>
             </div>
           )}
+          {/* Display-only per spec — write-back wiring is a deferred phase. No onClick intentionally; the button stays a visible, focusable affordance. */}
           <button type="button" className="tsd-focus mt-[14px] font-sans font-semibold text-[12px] leading-none text-matcha-deep bg-transparent border-none p-0 cursor-pointer inline-flex items-center gap-[5px]">
             Correct {first}'s row
             <span aria-hidden="true">→</span>
