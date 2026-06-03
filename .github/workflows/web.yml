@@ -1,26 +1,24 @@
-name: web — build & deploy
+name: web — CI & deploy
 
+# checks: runs on PRs and on main (typecheck → test → guardrail → build).
+# deploy: only on main / manual; needs checks; publishes web/dist to Pages.
 on:
+  pull_request:
+    paths: ["web/**", ".github/workflows/web.yml"]
   push:
     branches: [main]
     paths: ["web/**", ".github/workflows/web.yml"]
   workflow_dispatch: {}
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
-  build-deploy:
+  checks:
+    name: typecheck · test · guardrail · build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+    permissions:
+      contents: read
+    concurrency:
+      group: web-checks-${{ github.ref }}
+      cancel-in-progress: true
     defaults:
       run:
         working-directory: web
@@ -36,8 +34,27 @@ jobs:
       - run: npm test
       - run: npm run guardrail
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
+      # Only stage the Pages artifact when we're actually going to deploy.
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: web/dist
+
+  deploy:
+    needs: checks
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    steps:
       - id: deploy
         uses: actions/deploy-pages@v4
