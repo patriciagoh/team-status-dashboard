@@ -15,7 +15,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "resolveJsonModule": true,
-    "esModuleInterop": true,
 
     /* Linting */
     "noUnusedLocals": true,
