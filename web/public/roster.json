@@ -1,0 +1,425 @@
+{
+  "snapshot": {
+    "day": "Tuesday, June 3, 2026",
+    "time": "9:02 AM ET",
+    "prev": "yesterday, 2:00 PM",
+    "next": "2:00 PM ET",
+    "slackConnected": true
+  },
+  "teams": [
+    {
+      "name": "Platform",
+      "lead": "Maya R.",
+      "people": [
+        {
+          "name": "Maya R.",
+          "initials": "MR",
+          "role": "EM",
+          "team": "Platform",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Multi-region failover runbook + drills",
+          "ticket": "PLAT-412",
+          "since": null,
+          "detail": {
+            "tickets": ["PLAT-412 Failover runbook", "PLAT-409 Drill scheduling"],
+            "note": "Cycle 24 commitment."
+          }
+        },
+        {
+          "name": "Devin O.",
+          "initials": "DO",
+          "role": "Sr. Eng",
+          "team": "Platform",
+          "cat": "incident",
+          "conf": "high",
+          "what": "DB connection pool exhaustion — prod",
+          "ticket": "INC-2208",
+          "since": "moved off PLAT-401 → incident",
+          "detail": {
+            "tickets": ["INC-2208 Pool exhaustion (sev2)", "PLAT-401 Query planner (paused)"],
+            "note": "Paged 08:14. Sev2, mitigated, RCA pending."
+          }
+        },
+        {
+          "name": "Priya N.",
+          "initials": "PN",
+          "role": "Eng",
+          "team": "Platform",
+          "cat": "planned",
+          "conf": "high",
+          "what": "GraphQL schema federation rollout",
+          "ticket": "PLAT-388",
+          "since": null,
+          "detail": {
+            "tickets": ["PLAT-388 Federation gateway", "PLAT-390 Schema lint CI"],
+            "note": "On track, review Thu."
+          }
+        },
+        {
+          "name": "Tomas B.",
+          "initials": "TB",
+          "role": "Sr. Eng",
+          "team": "Platform",
+          "cat": "unplanned",
+          "conf": "low",
+          "what": "Likely the OOM crashes — recent commits to memcache",
+          "ticket": "PLAT-431",
+          "since": "new this snapshot",
+          "detail": {
+            "tickets": ["PLAT-431 Memcache OOM? (inferred)"],
+            "note": "Inferred from commit activity; not on the board. Tomas can correct this."
+          }
+        },
+        {
+          "name": "Wen L.",
+          "initials": "WL",
+          "role": "Eng",
+          "team": "Platform",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Tracing spans for the ingest path",
+          "ticket": "PLAT-377",
+          "since": null,
+          "detail": {
+            "tickets": ["PLAT-377 OTel ingest spans"],
+            "note": "Steady."
+          }
+        },
+        {
+          "name": "Ade K.",
+          "initials": "AK",
+          "role": "Staff",
+          "team": "Platform",
+          "cat": "support",
+          "conf": "high",
+          "what": "Enterprise customer latency escalation",
+          "ticket": "SUP-1190",
+          "since": "moved off PLAT-360 → support",
+          "detail": {
+            "tickets": ["SUP-1190 Acme latency", "PLAT-360 Caching layer (paused)"],
+            "note": "On support rotation through Fri."
+          }
+        },
+        {
+          "name": "Greta S.",
+          "initials": "GS",
+          "role": "Eng",
+          "team": "Platform",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Config service read-replica cutover",
+          "ticket": "PLAT-402",
+          "since": null,
+          "detail": {
+            "tickets": ["PLAT-402 Read-replica cutover"],
+            "note": "Cutover staged for next cycle."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "lead": "Hassan I.",
+      "people": [
+        {
+          "name": "Hassan I.",
+          "initials": "HI",
+          "role": "EM",
+          "team": "Payments",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Dispute-handling redesign — discovery",
+          "ticket": "PAY-301",
+          "since": null,
+          "detail": {
+            "tickets": ["PAY-301 Disputes discovery"],
+            "note": "Discovery, specs by EOW."
+          }
+        },
+        {
+          "name": "Lucia M.",
+          "initials": "LM",
+          "role": "Sr. Eng",
+          "team": "Payments",
+          "cat": "incident",
+          "conf": "high",
+          "what": "Payout webhook backlog — retries stuck",
+          "ticket": "INC-2210",
+          "since": "moved off PAY-288 → incident",
+          "detail": {
+            "tickets": ["INC-2210 Webhook retries (sev3)", "PAY-288 Refund flow (paused)"],
+            "note": "Paged 09:31. Backlog draining."
+          }
+        },
+        {
+          "name": "Owen P.",
+          "initials": "OP",
+          "role": "Eng",
+          "team": "Payments",
+          "cat": "planned",
+          "conf": "high",
+          "what": "3DS2 step-up flow",
+          "ticket": "PAY-294",
+          "since": null,
+          "detail": {
+            "tickets": ["PAY-294 3DS2 step-up"],
+            "note": "In review."
+          }
+        },
+        {
+          "name": "Sara T.",
+          "initials": "ST",
+          "role": "Eng",
+          "team": "Payments",
+          "cat": "support",
+          "conf": "high",
+          "what": "Chargeback false-positive escalation",
+          "ticket": "SUP-1188",
+          "since": null,
+          "detail": {
+            "tickets": ["SUP-1188 Chargeback FP"],
+            "note": "On rotation."
+          }
+        },
+        {
+          "name": "Niko V.",
+          "initials": "NV",
+          "role": "Sr. Eng",
+          "team": "Payments",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Ledger reconciliation perf",
+          "ticket": "PAY-276",
+          "since": null,
+          "detail": {
+            "tickets": ["PAY-276 Ledger recon perf"],
+            "note": "Steady."
+          }
+        },
+        {
+          "name": "Bea C.",
+          "initials": "BC",
+          "role": "Eng",
+          "team": "Payments",
+          "cat": "unplanned",
+          "conf": "high",
+          "what": "Hotfix: rounding error on JPY invoices",
+          "ticket": "PAY-310",
+          "since": "new this snapshot",
+          "detail": {
+            "tickets": ["PAY-310 JPY rounding hotfix"],
+            "note": "Self-reported; off-plan but urgent."
+          }
+        },
+        {
+          "name": "Felix A.",
+          "initials": "FA",
+          "role": "Eng",
+          "team": "Payments",
+          "cat": "lent",
+          "conf": "high",
+          "what": "Lent to Growth — checkout experiment",
+          "ticket": "GRO-145",
+          "since": "moved off PAY-281 → lent-out",
+          "detail": {
+            "tickets": ["GRO-145 Checkout A/B (Growth)", "PAY-281 (returns next cycle)"],
+            "note": "Lent to Growth for the cycle."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Growth",
+      "lead": "Renata D.",
+      "people": [
+        {
+          "name": "Renata D.",
+          "initials": "RD",
+          "role": "EM",
+          "team": "Growth",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Activation funnel instrumentation",
+          "ticket": "GRO-140",
+          "since": null,
+          "detail": {
+            "tickets": ["GRO-140 Funnel events"],
+            "note": "On plan."
+          }
+        },
+        {
+          "name": "Ivan Z.",
+          "initials": "IZ",
+          "role": "Eng",
+          "team": "Growth",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Onboarding checklist redesign",
+          "ticket": "GRO-138",
+          "since": null,
+          "detail": {
+            "tickets": ["GRO-138 Checklist v2"],
+            "note": "In build."
+          }
+        },
+        {
+          "name": "Mei H.",
+          "initials": "MH",
+          "role": "Sr. Eng",
+          "team": "Growth",
+          "cat": "adhoc",
+          "conf": "low",
+          "what": "Possibly the board exec dashboard ask",
+          "ticket": null,
+          "since": "new this snapshot",
+          "detail": {
+            "tickets": ["No ticket — Slack #growth-leads thread"],
+            "note": "Picked up from Slack; no ticket yet. Low confidence."
+          }
+        },
+        {
+          "name": "Cole W.",
+          "initials": "CW",
+          "role": "Eng",
+          "team": "Growth",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Referral reward ledger",
+          "ticket": "GRO-142",
+          "since": null,
+          "detail": {
+            "tickets": ["GRO-142 Referral ledger"],
+            "note": "Steady."
+          }
+        },
+        {
+          "name": "Anya P.",
+          "initials": "AP",
+          "role": "Eng",
+          "team": "Growth",
+          "cat": "unplanned",
+          "conf": "high",
+          "what": "Pricing-page experiment pulled forward",
+          "ticket": "GRO-149",
+          "since": "new this snapshot",
+          "detail": {
+            "tickets": ["GRO-149 Pricing A/B"],
+            "note": "Pulled forward by leadership ask."
+          }
+        },
+        {
+          "name": "Diego R.",
+          "initials": "DR",
+          "role": "Eng",
+          "team": "Growth",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Lifecycle email service",
+          "ticket": "GRO-133",
+          "since": null,
+          "detail": {
+            "tickets": ["GRO-133 Lifecycle emails"],
+            "note": "On track."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mobile",
+      "lead": "Yuki N.",
+      "people": [
+        {
+          "name": "Yuki N.",
+          "initials": "YN",
+          "role": "EM",
+          "team": "Mobile",
+          "cat": "planned",
+          "conf": "high",
+          "what": "App-size budget + startup trace",
+          "ticket": "MOB-220",
+          "since": null,
+          "detail": {
+            "tickets": ["MOB-220 Startup trace"],
+            "note": "On plan."
+          }
+        },
+        {
+          "name": "Sam E.",
+          "initials": "SE",
+          "role": "Sr. Eng",
+          "team": "Mobile",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Offline-first sync engine",
+          "ticket": "MOB-211",
+          "since": null,
+          "detail": {
+            "tickets": ["MOB-211 Offline sync"],
+            "note": "Big rock, on track."
+          }
+        },
+        {
+          "name": "Lila F.",
+          "initials": "LF",
+          "role": "Eng",
+          "team": "Mobile",
+          "cat": "support",
+          "conf": "low",
+          "what": "Maybe the crash spike triage — Sentry assigned",
+          "ticket": "MOB-231",
+          "since": "new this snapshot",
+          "detail": {
+            "tickets": ["MOB-231 Crash triage (inferred)"],
+            "note": "Inferred from Sentry assignment. Lila can correct."
+          }
+        },
+        {
+          "name": "Omar G.",
+          "initials": "OG",
+          "role": "Eng",
+          "team": "Mobile",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Biometric re-auth flow",
+          "ticket": "MOB-204",
+          "since": null,
+          "detail": {
+            "tickets": ["MOB-204 Biometric re-auth"],
+            "note": "In review."
+          }
+        },
+        {
+          "name": "Petra K.",
+          "initials": "PK",
+          "role": "Eng",
+          "team": "Mobile",
+          "cat": "adhoc",
+          "conf": "high",
+          "what": "App Store screenshots + release notes",
+          "ticket": null,
+          "since": null,
+          "detail": {
+            "tickets": ["No ticket — release chore"],
+            "note": "Release week chore."
+          }
+        },
+        {
+          "name": "Theo M.",
+          "initials": "TM",
+          "role": "Eng",
+          "team": "Mobile",
+          "cat": "planned",
+          "conf": "high",
+          "what": "Push notification preferences",
+          "ticket": "MOB-218",
+          "since": null,
+          "detail": {
+            "tickets": ["MOB-218 Push prefs"],
+            "note": "Steady."
+          }
+        }
+      ]
+    }
+  ]
+}

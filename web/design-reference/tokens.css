@@ -1,0 +1,77 @@
+/* Matcha Oat — design tokens, reconstructed faithfully from the
+   matcha-oat-design-system handoff doc (tokens are the source of truth).
+   Real values live here; everything else references var(--…). */
+:root {
+  /* Neutrals — warm, never cool grey */
+  --oat: #FAF7EF;        /* page background */
+  --paper: #FFFFFF;      /* cards, raised surfaces */
+  --ink: #23211B;        /* primary text */
+  --ink-2: #4C483E;      /* secondary text / body */
+  --muted: #777165;      /* tertiary, meta, captions (AA 4.5:1) */
+  --line: #E8E2D5;       /* hairline dividers */
+  --line-2: #DAD3C3;     /* card borders (slightly stronger) */
+
+  /* Brand green — matcha */
+  --matcha: #6E8B57;        /* rules, dots, accents (non-text) */
+  --matcha-deep: #4E6B3A;   /* eyebrows, links, green text (5.6:1) */
+  --matcha-tint: #EDF1E5;   /* chips / soft callout fields */
+  --matcha-tint-border: #DBE3CF;
+  --matcha-grad: linear-gradient(160deg, #F4F7EE, #EDF1E5);
+
+  /* Accent — yolk (the only accent; use sparingly) */
+  --yolk: #E8B23C;          /* underlines, active states, washes */
+  --yolk-deep: #8E6416;     /* "why" labels, accent text (4.9:1) */
+  --yolk-tint: #FBEDC6;     /* "why this matters" callout field */
+  --yolk-tint-text: #6A5320;
+
+  /* Urgent — rust (the "incident / firefighting" signal) */
+  --rust: #C0533A;
+  --rust-deep: #9A3D29;
+  --rust-tint: #F6E2DA;
+  --rust-tint-border: #EBC9BD;
+
+  /* Dark surface (git-log / terminal motif) */
+  --terminal: #26241D;
+
+  /* Status / category dots — warm earthy ramp, calm -> urgent (no cool hues).
+     Hue is reserved for signal: planned=calm matcha, unplanned=yolk, incident=rust;
+     the minor categories sit in warm sage/taupe neutrals. */
+  --dot-planned: #6E8B57;   /* matcha — the calm baseline */
+  --dot-adhoc: #A8B58F;     /* light sage */
+  --dot-lent: #C7BDA6;      /* light taupe */
+  --dot-support: #8E8569;   /* deep taupe / olive */
+  --dot-unplanned: #E8B23C; /* yolk — attention */
+  --dot-incident: #C0533A;  /* rust — urgent */
+
+  /* Type */
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  --mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --script: "Sacramento", cursive;
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-card: 12px;
+  --r-lg: 14px;
+  --r-xl: 16px;
+  --r-pill: 999px;
+
+  /* Elevation — brown-tinted, never black */
+  --shadow-card: 0 14px 30px rgba(60,50,30,0.10);
+  --shadow-portrait: 0 24px 60px rgba(60,48,28,0.16);
+  --shadow-badge: 0 8px 22px rgba(60,48,28,0.16);
+
+  /* Focus ring */
+  --focus: 0 0 0 2px var(--oat), 0 0 0 4px var(--matcha-deep);
+}
+
+/* Ambient "available" pulse — used on the live snapshot dot */
+@keyframes tsd-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(110,139,87,0.30); }
+  70%  { box-shadow: 0 0 0 9px rgba(110,139,87,0); }
+  100% { box-shadow: 0 0 0 0 rgba(110,139,87,0); }
+}
+.tsd-pulse { animation: tsd-pulse 2s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .tsd-pulse { animation: none; }
+}
