@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { Avatar } from "./Avatar";
 import { CategoryChip } from "./CategoryChip";
 import { SinceNote } from "./SinceNote";
 import { WorkingOn } from "./WorkingOn";
@@ -29,5 +30,16 @@ describe("leaf components", () => {
     expect(screen.getByText(/new this snapshot/)).toBeInTheDocument();
     rerender(<SinceNote person={{ ...base, since: null }} />);
     expect(screen.getByText("no change")).toBeInTheDocument();
+  });
+
+  it("Avatar renders the person's initials and does not throw", () => {
+    render(<Avatar person={base} />);
+    expect(screen.getByText("TB")).toBeInTheDocument();
+  });
+
+  it("high-confidence WorkingOn renders its what text without a '~' marker", () => {
+    render(<WorkingOn person={{ ...base, conf: "high", what: "Steady work" }} />);
+    expect(screen.getByText("Steady work")).toBeInTheDocument();
+    expect(screen.queryByText("~", { exact: false })).toBeNull();
   });
 });

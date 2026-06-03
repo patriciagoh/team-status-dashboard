@@ -5,10 +5,10 @@ export function Avatar({ person, size = 26 }: { person: Person; size?: number })
     <span
       className="inline-flex items-center justify-center rounded-full shrink-0 bg-paper text-ink-2 font-mono font-bold tracking-[0.02em]"
       style={{
-        width: size,
-        height: size,
+        width: `${size}px`,
+        height: `${size}px`,
         border: `1.5px solid var(--dot-${person.cat})`,
-        fontSize: Math.round(size * 0.33),
+        fontSize: `${Math.round(size * 0.33)}px`,
         lineHeight: 1,
       }}
     >
