@@ -1,86 +1,23 @@
-name: Build & publish dashboard
+name: legacy demo — build check (no deploy)
 
-# Pulls Linear twice a day, encrypts the generated dashboard with a shared
-# password (staticrypt), and publishes it to GitHub Pages.
-#
-# Cron is in UTC and has no DST handling. 13:00/18:00 UTC == 09:00/14:00
-# America/Toronto during EDT (Mar–Nov). During EST it fires at 08:00/13:00 local.
-# Adjust the hours below if you want it pinned to standard time instead.
+# The Command View app (web/, see web.yml) is now the published Pages site.
+# This keeps verifying the Python --demo generator builds, but no longer publishes.
 on:
-  schedule:
-    - cron: "0 13 * * 1-5"   # ~09:00 ET, weekdays
-    - cron: "0 18 * * 1-5"   # ~14:00 ET, weekdays
-  workflow_dispatch: {}        # lets you run it on demand from the Actions tab
+  workflow_dispatch: {}
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-# Never run two deploys at once; let a newer run supersede an in-flight one.
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install package
         run: pip install -e .
-
-      # Best-effort persistence of snapshots so the "since last snapshot" diff
-      # works across runs. A cache miss just means that run shows a baseline.
-      - name: Restore snapshots
-        uses: actions/cache@v4
-        with:
-          path: snapshots
-          key: snapshots-${{ github.run_id }}
-          restore-keys: |
-            snapshots-
-
       - name: Generate dashboard (POC — bundled fictional data, no Linear key)
         run: |
-          python -m team_status.cli \
-            --demo \
-            --config config.json \
-            --snapshots snapshots \
-            --out dashboard.html
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Encrypt with staticrypt
-        env:
-          STATICRYPT_PASSWORD: ${{ secrets.STATICRYPT_PASSWORD }}
-        run: |
-          if [ -z "$STATICRYPT_PASSWORD" ]; then
-            echo "STATICRYPT_PASSWORD secret is not set — refusing to publish unencrypted." >&2
-            exit 1
-          fi
-          mkdir -p site
-          # --short: skip the short-password warning + its interactive [y/N]
-          # prompt (which would hang in CI). Fine here: fictional-data POC.
-          npx -y staticrypt dashboard.html \
-            -p "$STATICRYPT_PASSWORD" \
-            --short \
-            -d site
-          # Pages serves index.html as the entry point.
-          mv site/dashboard.html site/index.html
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-      - id: deploy
-        uses: actions/deploy-pages@v4
+          python -m team_status.cli --demo --config config.json --snapshots snapshots --out dashboard.html
