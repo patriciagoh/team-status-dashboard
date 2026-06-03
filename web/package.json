@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc -b --noEmit",
-    "guardrail": "node node_modules/matcha-oat-design-system/scripts/check-no-raw-values.mjs $(find src -type f \\( -name '*.ts' -o -name '*.tsx' -o -name '*.css' \\) ! -name 'tokens.categories.css')"
+    "guardrail": "find src -type f \\( -name '*.ts' -o -name '*.tsx' -o -name '*.css' \\) ! -name 'tokens.categories.css' -print0 | xargs -0 node node_modules/matcha-oat-design-system/scripts/check-no-raw-values.mjs"
   },
   "dependencies": {
     "matcha-oat-design-system": "github:patriciagoh/matcha-oat-design-system",
@@ -22,7 +22,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^24.12.3",
+    "@types/node": "^20.19.41",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.7.0",
