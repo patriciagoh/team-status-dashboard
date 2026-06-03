@@ -20,3 +20,10 @@ export const CATEGORIES: Record<Category, CategoryMeta> = {
 export const CAT_ORDER: Category[] = (Object.values(CATEGORIES) as CategoryMeta[])
   .sort((a, b) => a.order - b.order)
   .map((c) => c.key);
+
+/** Categories whose COUNT is shown in its signal color (the rest read as neutral ink). incident=urgent rust, unplanned=attention yolk, planned=calm matcha. */
+export const SIGNAL_COLOR: Partial<Record<Category, string>> = {
+  incident: "var(--rust-deep)",
+  unplanned: "var(--yolk-deep)",
+  planned: "var(--matcha-deep)",
+};
