@@ -27,4 +27,16 @@ body {
 
   /* focus ring honoring matcha-oat focus token */
   .tsd-focus:focus-visible { outline: var(--focus); outline-offset: var(--focus-offset); }
+
+  .tsd-row { transition: transform var(--dur-row), background var(--dur-row); }
+  .tsd-arr { opacity: 0; transition: opacity var(--dur-base); }
+  .tsd-row:hover:not([aria-expanded="true"]) {
+    background: linear-gradient(90deg, rgba(232, 178, 60, 0.16), rgba(232, 178, 60, 0) 60%);
+    transform: translateX(5px);
+  }
+  .tsd-row:hover .tsd-arr { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    .tsd-row, .tsd-arr { transition: none; }
+    .tsd-row:hover:not([aria-expanded="true"]) { transform: none; }
+  }
 }

@@ -21,6 +21,8 @@
   --dot-incident: var(--rust);
 
   /* Category chip fields: bg / text / border. Text verified >=4.5:1 on bg (see a11y task). */
+  --row-open-bg: #FBF9F3;                   /* warm open-row wash (oat tinted) */
+
   --cat-planned-bg: var(--matcha-tint);     --cat-planned-text: var(--matcha-deep);     --cat-planned-border: var(--matcha-tint-border);
   --cat-adhoc-bg: var(--paper);             --cat-adhoc-text: var(--ink-2);             --cat-adhoc-border: var(--line-2);
   --cat-lent-bg: #F1EFE9;                   --cat-lent-text: var(--ink-2);              --cat-lent-border: var(--line-2);
