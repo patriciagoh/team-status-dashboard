@@ -51,4 +51,18 @@ describe("sanitizeRoster", () => {
     expect(() => sanitizeRoster(emptyRoster())).not.toThrow();
     expect(emptyRoster().teams).toEqual([]);
   });
+
+  it("preserves a person id when present and generates one when missing", () => {
+    const withId = sanitizeRoster({
+      teams: [{ name: "T", lead: "L", people: [{ id: "keep-me", name: "A", cat: "planned" }] }],
+      snapshot: {},
+    });
+    expect(withId.teams[0].people[0].id).toBe("keep-me");
+
+    const withoutId = sanitizeRoster({
+      teams: [{ name: "T", lead: "L", people: [{ name: "A", cat: "planned" }] }],
+      snapshot: {},
+    });
+    expect(withoutId.teams[0].people[0].id).toMatch(/.+/); // a generated id
+  });
 });

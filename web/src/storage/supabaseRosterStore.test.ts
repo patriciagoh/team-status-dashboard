@@ -14,7 +14,7 @@ class FakeRowStore implements RowStore {
 
 const validRow = {
   teams: [{ name: "T", lead: "L", people: [
-    { name: "A", initials: "A", role: "Eng", team: "T", cat: "planned", conf: "high",
+    { id: "sv1", name: "A", initials: "A", role: "Eng", team: "T", cat: "planned", conf: "high",
       what: "x", ticket: null, since: null, detail: { tickets: [], note: "" } },
   ] }],
   snapshot: { day: "d", time: "t", prev: "p", next: "n", slackConnected: false },

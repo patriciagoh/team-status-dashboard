@@ -2,8 +2,10 @@ import { describe, it, expect } from "vitest";
 import { derive } from "./roster";
 import type { RosterData, Person } from "./types";
 
+let _n = 0;
 function person(cat: Person["cat"], since: string | null = null): Person {
   return {
+    id: `t${++_n}`,
     name: "X Y", initials: "XY", role: "Eng", team: "T", cat, conf: "high",
     what: "w", ticket: null, since, detail: { tickets: [], note: "" },
   };

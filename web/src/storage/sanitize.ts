@@ -34,6 +34,7 @@ function sanitizePerson(raw: unknown, teamName: string): Person {
   const r = isRecord(raw) ? raw : {};
   const detail = isRecord(r.detail) ? r.detail : {};
   return {
+    id: typeof r.id === "string" && r.id ? r.id : crypto.randomUUID(),
     name: str(r.name),
     initials: str(r.initials),
     role: str(r.role),
