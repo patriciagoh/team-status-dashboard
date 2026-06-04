@@ -44,6 +44,14 @@ describe("PersonForm (engineer + correction)", () => {
     expect(correction).toEqual({ cat: "unplanned", note: "pulled into triage" });
   });
 
+  it("shows an error and keeps input when save fails", async () => {
+    const onSave = vi.fn<(input: EngineerInput, correction: Correction) => Promise<void>>(async () => { throw new Error("offline"); });
+    render(<PersonForm initial={{ engineer: eng }} teams={["Platform"]} onSave={onSave} onCancel={() => {}} />);
+    await userEvent.click(screen.getByRole("button", { name: /^Save$/ }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(/couldn.t save/i);
+    expect(screen.getByLabelText("Name")).toHaveValue("Maya R."); // input preserved
+  });
+
   it("two-click delete then calls onDelete", async () => {
     const onDelete = vi.fn(async () => {});
     render(<PersonForm initial={{ engineer: eng }} teams={["Platform"]} onSave={async () => {}} onCancel={() => {}} onDelete={onDelete} />);
