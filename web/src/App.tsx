@@ -1,23 +1,29 @@
+// web/src/App.tsx
 import { useEffect, useState } from "react";
 import type { RosterData } from "./types";
 import { derive } from "./roster";
+import type { RosterStore } from "./storage/RosterStore";
+import { createRosterStore } from "./storage/createRosterStore";
 import { Header } from "./components/Header";
 import { SummaryStrip } from "./components/SummaryStrip";
 import { RosterTable } from "./components/RosterTable";
 
-export default function App() {
+export default function App({ store }: { store?: RosterStore }) {
   const [data, setData] = useState<RosterData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}roster.json`)
-      .then((r) => {
-        if (!r.ok) throw new Error(`roster.json ${r.status}`);
-        return r.json();
-      })
-      .then((d: RosterData) => setData(d))
-      .catch((e) => setError(String(e)));
-  }, []);
+    let cancelled = false;
+    const ready = store ? Promise.resolve(store) : createRosterStore();
+    ready
+      .then((s) => s.load())
+      // Clear any stale error/data from a previous store on resolution, so a
+      // changed store prop (e.g. Phase 2 injecting a live store after login)
+      // can't leave the old error or rows stuck on screen.
+      .then((d) => { if (!cancelled) { setData(d); setError(null); } })
+      .catch((e) => { if (!cancelled) { setError(String(e)); setData(null); } });
+    return () => { cancelled = true; };
+  }, [store]);
 
   if (error) {
     return (
@@ -34,8 +40,14 @@ export default function App() {
   return (
     <main className="p-[38px_48px_44px]">
       <Header snapshot={data.snapshot} total={d.total} />
-      <SummaryStrip d={d} />
-      <RosterTable d={d} />
+      {d.total === 0 ? (
+        <p className="mt-[26px] font-mono text-[12px] text-muted">No one on the roster yet.</p>
+      ) : (
+        <>
+          <SummaryStrip d={d} />
+          <RosterTable d={d} />
+        </>
+      )}
     </main>
   );
 }
