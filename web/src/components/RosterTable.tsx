@@ -20,7 +20,7 @@ export function RosterTable({ d }: { d: Derived }) {
         <div key={team.name}>
           <TeamOverviewRow team={team} first={ti === 0} />
           {team.people.map((p, i) => (
-            <PersonRow key={p.name} person={p} idx={i + 1} last={ti === lastTeam && i === team.people.length - 1} />
+            <PersonRow key={p.id} person={p} idx={i + 1} last={ti === lastTeam && i === team.people.length - 1} />
           ))}
         </div>
       ))}
