@@ -79,7 +79,7 @@ export function PersonForm({
       <form onSubmit={onSubmit} className="mt-[24px] flex flex-col gap-[16px]">
         <label className={labelClass}>
           Name
-          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={name} onChange={(e) => setName(e.target.value)} />
+          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={name} onChange={(e) => setName(e.target.value)} aria-required="true" />
         </label>
         <label className={labelClass}>
           Role
@@ -87,7 +87,7 @@ export function PersonForm({
         </label>
         <label className={labelClass}>
           Team
-          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={team} onChange={(e) => setTeam(e.target.value)} list={listId} />
+          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={team} onChange={(e) => setTeam(e.target.value)} list={listId} aria-required="true" />
           <datalist id={listId}>
             {teams.map((t) => <option key={t} value={t} />)}
           </datalist>
