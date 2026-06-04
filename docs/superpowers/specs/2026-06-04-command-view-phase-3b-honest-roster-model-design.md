@@ -101,10 +101,12 @@ a chip (the chip is replaced by the "no tracked activity" treatment).
 - **`sanitizeDoc(rawData, rawWork): RosterDoc`** is the new load boundary:
   - Recognized new shape (`engineers` array) → backfill ids/fields.
   - **Old Phase-3 shape** (`teams[]` of `Person`) → **migrate**: each person →
-    an `Engineer` (id, name, role, team, `linearUserId: null`, derive `email:
-    null`) and a `work.states[id]` from that person's `cat/what/ticket/since/
-    conf/detail`; `corrections` from any with a note? No — migration maps the
-    typed work into `work.states` so the row still shows, `corrections` empty.
+    an `Engineer` (id, name, role, team, `linearUserId: null`, `email: null`).
+    `work` and `corrections` are left **empty** — migrated engineers show "no
+    tracked activity" until the pipeline syncs. (We deliberately do NOT carry the
+    old hand-typed fields into `work`, since `work` represents *pulled* data;
+    presenting hand-typed values as pulled would be dishonest. The only real data
+    is throwaway test rows, so nothing of value is lost.)
   - Non-null unrecognized → throw (Phase 1 data-loss guard preserved).
   - `emptyDoc()` = `{ engineers: [], corrections: {}, work: { syncedAt: null, states: {} } }`.
 - The `RowStore`/`RosterStore` seam now loads/saves the **human `data`** part

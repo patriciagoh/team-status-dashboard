@@ -41,6 +41,14 @@ describe("mergeRoster", () => {
     expect(p.hasActivity).toBe(true);
   });
 
+  it("an empty-note correction with no category is NOT treated as activity", () => {
+    const d = doc({
+      engineers: [{ id: "e1", name: "A B", role: "Eng", team: "T", linearUserId: null, email: null }],
+      corrections: { e1: { note: "" } },
+    });
+    expect(mergeRoster(d).teams[0].people[0].hasActivity).toBe(false);
+  });
+
   it("a correction category overrides the pulled work category", () => {
     const d = doc({
       engineers: [{ id: "e1", name: "A B", role: "Eng", team: "T", linearUserId: null, email: null }],

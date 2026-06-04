@@ -22,7 +22,7 @@ export function mergeRoster(doc: RosterDoc): RosterData {
       ticket: work?.ticket ?? null,
       since: work?.since ?? null,
       detail: {
-        tickets: work?.detail.tickets ?? [],
+        tickets: work ? [...work.detail.tickets] : [],
         note: corr?.note ?? work?.detail.note ?? "",
       },
       hasActivity: !!work || correctionIsSignal,
