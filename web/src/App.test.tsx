@@ -34,4 +34,10 @@ describe("App", () => {
     await waitFor(() => expect(screen.getByText(/Could not load the roster/)).toBeInTheDocument());
     expect(screen.getByText(/503/)).toBeInTheDocument();
   });
+
+  it("renders a Sign out button when onSignOut is provided", async () => {
+    render(<App store={storeOf(roster as RosterData)} onSignOut={() => {}} />);
+    await waitFor(() => expect(screen.getByText("Team status")).toBeInTheDocument());
+    expect(screen.getByRole("button", { name: /sign out/i })).toBeInTheDocument();
+  });
 });

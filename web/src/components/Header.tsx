@@ -1,6 +1,6 @@
 import type { Snapshot } from "../types";
 
-export function Header({ snapshot, total }: { snapshot: Snapshot; total: number }) {
+export function Header({ snapshot, total, onSignOut }: { snapshot: Snapshot; total: number; onSignOut?: () => void }) {
   const day = snapshot.day.split(",")[0];
   return (
     <header className="flex justify-between items-center">
@@ -22,6 +22,15 @@ export function Header({ snapshot, total }: { snapshot: Snapshot; total: number 
         <span className="font-mono text-[12px] leading-none text-muted">
           next refresh {snapshot.next}
         </span>
+        {onSignOut && (
+          <button
+            type="button" onClick={onSignOut}
+            className="font-mono text-[12px] leading-none text-muted hover:text-ink-2 underline underline-offset-2 border-0 bg-transparent cursor-pointer p-0"
+            style={{ outlineColor: "var(--focus)" }}
+          >
+            Sign out
+          </button>
+        )}
       </div>
     </header>
   );

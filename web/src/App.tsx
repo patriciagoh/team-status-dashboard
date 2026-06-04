@@ -8,7 +8,7 @@ import { Header } from "./components/Header";
 import { SummaryStrip } from "./components/SummaryStrip";
 import { RosterTable } from "./components/RosterTable";
 
-export default function App({ store }: { store?: RosterStore }) {
+export default function App({ store, onSignOut }: { store?: RosterStore; onSignOut?: () => void }) {
   const [data, setData] = useState<RosterData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,9 +17,9 @@ export default function App({ store }: { store?: RosterStore }) {
     const ready = store ? Promise.resolve(store) : createRosterStore();
     ready
       .then((s) => s.load())
-      // Clear any stale error/data from a previous store on resolution, so a
-      // changed store prop (e.g. Phase 2 injecting a live store after login)
-      // can't leave the old error or rows stuck on screen.
+      // Clear any stale error/data on resolution so a changed store prop can't
+      // leave a previous error or rows stuck on screen (success clears error;
+      // the catch below clears data).
       .then((d) => { if (!cancelled) { setData(d); setError(null); } })
       .catch((e) => { if (!cancelled) { setError(String(e)); setData(null); } });
     return () => { cancelled = true; };
@@ -39,7 +39,7 @@ export default function App({ store }: { store?: RosterStore }) {
   const d = derive(data);
   return (
     <main className="p-[38px_48px_44px]">
-      <Header snapshot={data.snapshot} total={d.total} />
+      <Header snapshot={data.snapshot} total={d.total} onSignOut={onSignOut} />
       {d.total === 0 ? (
         <p className="mt-[26px] font-mono text-[12px] text-muted">No one on the roster yet.</p>
       ) : (
