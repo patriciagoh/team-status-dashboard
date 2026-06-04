@@ -1,6 +1,6 @@
 // web/src/storage/sanitize.test.ts
 import { describe, it, expect } from "vitest";
-import { sanitizeRoster, emptyRoster } from "./sanitize";
+import { sanitizeRoster, sanitizeDoc, emptyDoc } from "./sanitize";
 
 describe("sanitizeRoster", () => {
   it("accepts a valid roster and preserves people", () => {
@@ -47,9 +47,9 @@ describe("sanitizeRoster", () => {
     expect(() => sanitizeRoster(42)).toThrow();
   });
 
-  it("emptyRoster() is itself valid input", () => {
-    expect(() => sanitizeRoster(emptyRoster())).not.toThrow();
-    expect(emptyRoster().teams).toEqual([]);
+  it("an empty teams+snapshot blob is valid input", () => {
+    expect(() => sanitizeRoster({ teams: [], snapshot: {} })).not.toThrow();
+    expect(sanitizeRoster({ teams: [], snapshot: {} }).teams).toEqual([]);
   });
 
   it("preserves a person id when present and generates one when missing", () => {
@@ -64,5 +64,40 @@ describe("sanitizeRoster", () => {
       snapshot: {},
     });
     expect(withoutId.teams[0].people[0].id).toMatch(/.+/); // a generated id
+  });
+});
+
+describe("sanitizeDoc", () => {
+  it("accepts the new shape and backfills engineer ids", () => {
+    const d = sanitizeDoc(
+      { engineers: [{ name: "Maya R.", role: "EM", team: "Platform" }], corrections: {} },
+      { syncedAt: "t", states: {} },
+    );
+    expect(d.engineers[0].name).toBe("Maya R.");
+    expect(d.engineers[0].id).toMatch(/.+/);
+    expect(d.engineers[0].linearUserId).toBeNull();
+    expect(d.work.syncedAt).toBe("t");
+  });
+
+  it("migrates a legacy Phase-3 teams[] blob to engineers (no throw, no work)", () => {
+    const legacy = {
+      teams: [{ name: "Platform", lead: "", people: [
+        { id: "p1", name: "Maya R.", role: "EM", team: "Platform", cat: "planned", conf: "high", what: "x", ticket: null, since: null, detail: { tickets: [], note: "" } },
+      ] }],
+      snapshot: { day: "", time: "", prev: "", next: "", slackConnected: false },
+    };
+    const d = sanitizeDoc(legacy, {});
+    expect(d.engineers).toEqual([{ id: "p1", name: "Maya R.", role: "EM", team: "Platform", linearUserId: null, email: null }]);
+    expect(d.work.states).toEqual({});
+    expect(d.corrections).toEqual({});
+  });
+
+  it("throws on a non-null unrecognized blob", () => {
+    expect(() => sanitizeDoc({ nope: 1 }, {})).toThrow();
+  });
+
+  it("emptyDoc is valid input to sanitizeDoc", () => {
+    expect(() => sanitizeDoc(emptyDoc(), emptyDoc().work)).not.toThrow();
+    expect(emptyDoc().engineers).toEqual([]);
   });
 });
