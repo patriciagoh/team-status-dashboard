@@ -50,4 +50,19 @@ describe("derive", () => {
   it("team B has no off-plan", () => {
     expect(d.teams.find((t) => t.name === "B")!.offPlan).toBe(0);
   });
+
+  it("excludes no-activity people from category counts but counts them in total", () => {
+    const data = {
+      snapshot: { day: "", time: "", prev: "", next: "", slackConnected: false },
+      teams: [{ name: "T", lead: "", people: [
+        { ...person("planned"), hasActivity: true },
+        { ...person("incident"), hasActivity: false }, // no tracked activity
+      ] }],
+    };
+    const d = derive(data as never);
+    expect(d.total).toBe(2);             // counted in headcount
+    expect(d.counts.incident).toBe(0);   // not counted in categories
+    expect(d.counts.planned).toBe(1);
+    expect(d.firefighting).toBe(0);
+  });
 });
