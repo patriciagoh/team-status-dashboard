@@ -17,8 +17,11 @@ export default function App({ store }: { store?: RosterStore }) {
     const ready = store ? Promise.resolve(store) : createRosterStore();
     ready
       .then((s) => s.load())
-      .then((d) => { if (!cancelled) setData(d); })
-      .catch((e) => { if (!cancelled) setError(String(e)); });
+      // Clear any stale error/data from a previous store on resolution, so a
+      // changed store prop (e.g. Phase 2 injecting a live store after login)
+      // can't leave the old error or rows stuck on screen.
+      .then((d) => { if (!cancelled) { setData(d); setError(null); } })
+      .catch((e) => { if (!cancelled) { setError(String(e)); setData(null); } });
     return () => { cancelled = true; };
   }, [store]);
 

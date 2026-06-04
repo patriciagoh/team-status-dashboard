@@ -25,6 +25,7 @@ describe("App", () => {
     const empty: RosterData = { teams: [], snapshot: (roster as RosterData).snapshot };
     render(<App store={storeOf(empty)} />);
     await waitFor(() => expect(screen.getByText(/No one on the roster yet/i)).toBeInTheDocument());
+    expect(screen.getByText("Team status")).toBeInTheDocument(); // Header still renders when empty
     expect(screen.queryByText("on plan")).toBeNull();
   });
 
