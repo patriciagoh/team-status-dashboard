@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "matcha-oat-design-system": "github:patriciagoh/matcha-oat-design-system",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

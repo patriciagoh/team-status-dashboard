@@ -4,9 +4,16 @@ import { SummaryStrip } from "./SummaryStrip";
 import { Header } from "./Header";
 import { derive } from "../roster";
 import roster from "../../public/roster.json";
-import type { RosterData } from "../types";
+import type { Person, RosterData } from "../types";
 
 const d = derive(roster as RosterData);
+
+function person(cat: Person["cat"]): Person {
+  return {
+    name: "X", initials: "X", role: "Eng", team: "T", cat, conf: "high",
+    what: "", ticket: null, since: null, detail: { tickets: [], note: "" },
+  };
+}
 
 describe("summary strip", () => {
   it("renders the four stat labels", () => {
@@ -15,6 +22,19 @@ describe("summary strip", () => {
     expect(screen.getByText("off plan")).toBeInTheDocument();
     expect(screen.getByText("firefighting")).toBeInTheDocument();
     expect(screen.getByText("changed")).toBeInTheDocument();
+  });
+
+  it("'off plan' tile counts incident + unplanned (not unplanned alone)", () => {
+    // 2 incidents + 1 unplanned → off plan = 3, a value unplanned alone can't produce
+    const synthetic = derive({
+      snapshot: roster.snapshot,
+      teams: [{ name: "T", lead: "X Y", people: [
+        person("incident"), person("incident"), person("unplanned"), person("planned"),
+      ] }],
+    } as RosterData);
+    render(<SummaryStrip d={synthetic} />);
+    const tile = screen.getByText("off plan").closest("div")!;
+    expect(tile).toHaveTextContent("3");
   });
 
   it("breakdown lists categories as text labels (no chart element)", () => {
