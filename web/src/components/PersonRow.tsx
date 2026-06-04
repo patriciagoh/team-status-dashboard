@@ -9,8 +9,7 @@ import { ROSTER_GRID } from "./rosterGrid";
 
 export function PersonRow({ person, idx, last }: { person: Person; idx: number; last: boolean }) {
   const [open, setOpen] = useState(false);
-  // person names are unique per roster, so the slug is a stable unique panel id
-  const panelId = `person-panel-${person.name.replace(/\s+/g, "-").replace(/[^\w-]/g, "")}`;
+  const panelId = `person-panel-${person.id}`;
   return (
     <div className="overflow-hidden" style={{ borderBottom: last && !open ? "none" : "1px solid var(--line)" }}>
       <button

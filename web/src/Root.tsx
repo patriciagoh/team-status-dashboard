@@ -27,5 +27,5 @@ function AuthGate({ authPort }: { authPort: AuthPort }) {
   if (session === null) {
     return <Login authPort={authPort} />;
   }
-  return <App onSignOut={() => { void authPort.signOut(); }} />;
+  return <App onSignOut={() => { void authPort.signOut(); }} editable />;
 }

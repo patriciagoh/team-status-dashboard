@@ -9,6 +9,7 @@ export interface PersonDetail {
 }
 
 export interface Person {
+  id: string;
   name: string;
   initials: string;
   role: string;

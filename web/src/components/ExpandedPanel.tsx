@@ -1,6 +1,8 @@
 import type { Person } from "../types";
+import { useRosterActions } from "../rosterActions";
 
 export function ExpandedPanel({ person, id }: { person: Person; id?: string }) {
+  const { onEditPerson } = useRosterActions();
   const first = person.name.split(" ")[0];
   return (
     <div id={id} className="px-[14px] pt-[4px] pb-[18px] pl-[52px] bg-oat">
@@ -32,8 +34,11 @@ export function ExpandedPanel({ person, id }: { person: Person; id?: string }) {
               </span>
             </div>
           )}
-          {/* Display-only per spec — write-back wiring is a deferred phase. No onClick intentionally; the button stays a visible, focusable affordance. */}
-          <button type="button" className="tsd-focus mt-[14px] font-sans font-semibold text-[12px] leading-none text-matcha-deep bg-transparent border-none p-0 cursor-pointer inline-flex items-center gap-[5px]">
+          <button
+            type="button"
+            onClick={onEditPerson ? () => onEditPerson(person.id) : undefined}
+            className="tsd-focus mt-[14px] font-sans font-semibold text-[12px] leading-none text-matcha-deep bg-transparent border-none p-0 cursor-pointer inline-flex items-center gap-[5px]"
+          >
             Correct {first}'s row
             <span aria-hidden="true">→</span>
           </button>

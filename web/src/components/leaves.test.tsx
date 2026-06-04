@@ -7,7 +7,7 @@ import { WorkingOn } from "./WorkingOn";
 import type { Person } from "../types";
 
 const base: Person = {
-  name: "Tomas B.", initials: "TB", role: "Sr. Eng", team: "Platform",
+  id: "t1", name: "Tomas B.", initials: "TB", role: "Sr. Eng", team: "Platform",
   cat: "unplanned", conf: "low", what: "Likely the OOM crashes",
   ticket: "PLAT-431", since: "new this snapshot",
   detail: { tickets: ["PLAT-431"], note: "Inferred." },

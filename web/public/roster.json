@@ -22,9 +22,13 @@
           "ticket": "PLAT-412",
           "since": null,
           "detail": {
-            "tickets": ["PLAT-412 Failover runbook", "PLAT-409 Drill scheduling"],
+            "tickets": [
+              "PLAT-412 Failover runbook",
+              "PLAT-409 Drill scheduling"
+            ],
             "note": "Cycle 24 commitment."
-          }
+          },
+          "id": "p01"
         },
         {
           "name": "Devin O.",
@@ -37,9 +41,13 @@
           "ticket": "INC-2208",
           "since": "moved off PLAT-401 → incident",
           "detail": {
-            "tickets": ["INC-2208 Pool exhaustion (sev2)", "PLAT-401 Query planner (paused)"],
+            "tickets": [
+              "INC-2208 Pool exhaustion (sev2)",
+              "PLAT-401 Query planner (paused)"
+            ],
             "note": "Paged 08:14. Sev2, mitigated, RCA pending."
-          }
+          },
+          "id": "p02"
         },
         {
           "name": "Priya N.",
@@ -52,9 +60,13 @@
           "ticket": "PLAT-388",
           "since": null,
           "detail": {
-            "tickets": ["PLAT-388 Federation gateway", "PLAT-390 Schema lint CI"],
+            "tickets": [
+              "PLAT-388 Federation gateway",
+              "PLAT-390 Schema lint CI"
+            ],
             "note": "On track, review Thu."
-          }
+          },
+          "id": "p03"
         },
         {
           "name": "Tomas B.",
@@ -67,9 +79,12 @@
           "ticket": "PLAT-431",
           "since": "new this snapshot",
           "detail": {
-            "tickets": ["PLAT-431 Memcache OOM? (inferred)"],
+            "tickets": [
+              "PLAT-431 Memcache OOM? (inferred)"
+            ],
             "note": "Inferred from commit activity; not on the board. Tomas can correct this."
-          }
+          },
+          "id": "p04"
         },
         {
           "name": "Wen L.",
@@ -82,9 +97,12 @@
           "ticket": "PLAT-377",
           "since": null,
           "detail": {
-            "tickets": ["PLAT-377 OTel ingest spans"],
+            "tickets": [
+              "PLAT-377 OTel ingest spans"
+            ],
             "note": "Steady."
-          }
+          },
+          "id": "p05"
         },
         {
           "name": "Ade K.",
@@ -97,9 +115,13 @@
           "ticket": "SUP-1190",
           "since": "moved off PLAT-360 → support",
           "detail": {
-            "tickets": ["SUP-1190 Acme latency", "PLAT-360 Caching layer (paused)"],
+            "tickets": [
+              "SUP-1190 Acme latency",
+              "PLAT-360 Caching layer (paused)"
+            ],
             "note": "On support rotation through Fri."
-          }
+          },
+          "id": "p06"
         },
         {
           "name": "Greta S.",
@@ -112,9 +134,12 @@
           "ticket": "PLAT-402",
           "since": null,
           "detail": {
-            "tickets": ["PLAT-402 Read-replica cutover"],
+            "tickets": [
+              "PLAT-402 Read-replica cutover"
+            ],
             "note": "Cutover staged for next cycle."
-          }
+          },
+          "id": "p07"
         }
       ]
     },
@@ -133,9 +158,12 @@
           "ticket": "PAY-301",
           "since": null,
           "detail": {
-            "tickets": ["PAY-301 Disputes discovery"],
+            "tickets": [
+              "PAY-301 Disputes discovery"
+            ],
             "note": "Discovery, specs by EOW."
-          }
+          },
+          "id": "p08"
         },
         {
           "name": "Lucia M.",
@@ -148,9 +176,13 @@
           "ticket": "INC-2210",
           "since": "moved off PAY-288 → incident",
           "detail": {
-            "tickets": ["INC-2210 Webhook retries (sev3)", "PAY-288 Refund flow (paused)"],
+            "tickets": [
+              "INC-2210 Webhook retries (sev3)",
+              "PAY-288 Refund flow (paused)"
+            ],
             "note": "Paged 09:31. Backlog draining."
-          }
+          },
+          "id": "p09"
         },
         {
           "name": "Owen P.",
@@ -163,9 +195,12 @@
           "ticket": "PAY-294",
           "since": null,
           "detail": {
-            "tickets": ["PAY-294 3DS2 step-up"],
+            "tickets": [
+              "PAY-294 3DS2 step-up"
+            ],
             "note": "In review."
-          }
+          },
+          "id": "p10"
         },
         {
           "name": "Sara T.",
@@ -178,9 +213,12 @@
           "ticket": "SUP-1188",
           "since": null,
           "detail": {
-            "tickets": ["SUP-1188 Chargeback FP"],
+            "tickets": [
+              "SUP-1188 Chargeback FP"
+            ],
             "note": "On rotation."
-          }
+          },
+          "id": "p11"
         },
         {
           "name": "Niko V.",
@@ -193,9 +231,12 @@
           "ticket": "PAY-276",
           "since": null,
           "detail": {
-            "tickets": ["PAY-276 Ledger recon perf"],
+            "tickets": [
+              "PAY-276 Ledger recon perf"
+            ],
             "note": "Steady."
-          }
+          },
+          "id": "p12"
         },
         {
           "name": "Bea C.",
@@ -208,9 +249,12 @@
           "ticket": "PAY-310",
           "since": "new this snapshot",
           "detail": {
-            "tickets": ["PAY-310 JPY rounding hotfix"],
+            "tickets": [
+              "PAY-310 JPY rounding hotfix"
+            ],
             "note": "Self-reported; off-plan but urgent."
-          }
+          },
+          "id": "p13"
         },
         {
           "name": "Felix A.",
@@ -223,9 +267,13 @@
           "ticket": "GRO-145",
           "since": "moved off PAY-281 → lent-out",
           "detail": {
-            "tickets": ["GRO-145 Checkout A/B (Growth)", "PAY-281 (returns next cycle)"],
+            "tickets": [
+              "GRO-145 Checkout A/B (Growth)",
+              "PAY-281 (returns next cycle)"
+            ],
             "note": "Lent to Growth for the cycle."
-          }
+          },
+          "id": "p14"
         }
       ]
     },
@@ -244,9 +292,12 @@
           "ticket": "GRO-140",
           "since": null,
           "detail": {
-            "tickets": ["GRO-140 Funnel events"],
+            "tickets": [
+              "GRO-140 Funnel events"
+            ],
             "note": "On plan."
-          }
+          },
+          "id": "p15"
         },
         {
           "name": "Ivan Z.",
@@ -259,9 +310,12 @@
           "ticket": "GRO-138",
           "since": null,
           "detail": {
-            "tickets": ["GRO-138 Checklist v2"],
+            "tickets": [
+              "GRO-138 Checklist v2"
+            ],
             "note": "In build."
-          }
+          },
+          "id": "p16"
         },
         {
           "name": "Mei H.",
@@ -274,9 +328,12 @@
           "ticket": null,
           "since": "new this snapshot",
           "detail": {
-            "tickets": ["No ticket — Slack #growth-leads thread"],
+            "tickets": [
+              "No ticket — Slack #growth-leads thread"
+            ],
             "note": "Picked up from Slack; no ticket yet. Low confidence."
-          }
+          },
+          "id": "p17"
         },
         {
           "name": "Cole W.",
@@ -289,9 +346,12 @@
           "ticket": "GRO-142",
           "since": null,
           "detail": {
-            "tickets": ["GRO-142 Referral ledger"],
+            "tickets": [
+              "GRO-142 Referral ledger"
+            ],
             "note": "Steady."
-          }
+          },
+          "id": "p18"
         },
         {
           "name": "Anya P.",
@@ -304,9 +364,12 @@
           "ticket": "GRO-149",
           "since": "new this snapshot",
           "detail": {
-            "tickets": ["GRO-149 Pricing A/B"],
+            "tickets": [
+              "GRO-149 Pricing A/B"
+            ],
             "note": "Pulled forward by leadership ask."
-          }
+          },
+          "id": "p19"
         },
         {
           "name": "Diego R.",
@@ -319,9 +382,12 @@
           "ticket": "GRO-133",
           "since": null,
           "detail": {
-            "tickets": ["GRO-133 Lifecycle emails"],
+            "tickets": [
+              "GRO-133 Lifecycle emails"
+            ],
             "note": "On track."
-          }
+          },
+          "id": "p20"
         }
       ]
     },
@@ -340,9 +406,12 @@
           "ticket": "MOB-220",
           "since": null,
           "detail": {
-            "tickets": ["MOB-220 Startup trace"],
+            "tickets": [
+              "MOB-220 Startup trace"
+            ],
             "note": "On plan."
-          }
+          },
+          "id": "p21"
         },
         {
           "name": "Sam E.",
@@ -355,9 +424,12 @@
           "ticket": "MOB-211",
           "since": null,
           "detail": {
-            "tickets": ["MOB-211 Offline sync"],
+            "tickets": [
+              "MOB-211 Offline sync"
+            ],
             "note": "Big rock, on track."
-          }
+          },
+          "id": "p22"
         },
         {
           "name": "Lila F.",
@@ -370,9 +442,12 @@
           "ticket": "MOB-231",
           "since": "new this snapshot",
           "detail": {
-            "tickets": ["MOB-231 Crash triage (inferred)"],
+            "tickets": [
+              "MOB-231 Crash triage (inferred)"
+            ],
             "note": "Inferred from Sentry assignment. Lila can correct."
-          }
+          },
+          "id": "p23"
         },
         {
           "name": "Omar G.",
@@ -385,9 +460,12 @@
           "ticket": "MOB-204",
           "since": null,
           "detail": {
-            "tickets": ["MOB-204 Biometric re-auth"],
+            "tickets": [
+              "MOB-204 Biometric re-auth"
+            ],
             "note": "In review."
-          }
+          },
+          "id": "p24"
         },
         {
           "name": "Petra K.",
@@ -400,9 +478,12 @@
           "ticket": null,
           "since": null,
           "detail": {
-            "tickets": ["No ticket — release chore"],
+            "tickets": [
+              "No ticket — release chore"
+            ],
             "note": "Release week chore."
-          }
+          },
+          "id": "p25"
         },
         {
           "name": "Theo M.",
@@ -415,9 +496,12 @@
           "ticket": "MOB-218",
           "since": null,
           "detail": {
-            "tickets": ["MOB-218 Push prefs"],
+            "tickets": [
+              "MOB-218 Push prefs"
+            ],
             "note": "Steady."
-          }
+          },
+          "id": "p26"
         }
       ]
     }

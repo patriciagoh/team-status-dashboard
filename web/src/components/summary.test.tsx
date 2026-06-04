@@ -10,7 +10,7 @@ const d = derive(roster as RosterData);
 
 function person(cat: Person["cat"]): Person {
   return {
-    name: "X", initials: "X", role: "Eng", team: "T", cat, conf: "high",
+    id: "s1", name: "X", initials: "X", role: "Eng", team: "T", cat, conf: "high",
     what: "", ticket: null, since: null, detail: { tickets: [], note: "" },
   };
 }
