@@ -15,8 +15,9 @@ function AuthGate({ authPort }: { authPort: AuthPort }) {
 
   useEffect(() => {
     let active = true;
-    authPort.getSession().then((s) => { if (active) setSession(s); });
-    const unsub = authPort.onAuthChange((s) => setSession(s)); // authoritative
+    let settled = false; // onAuthChange is authoritative — once it fires, the getSession seed must not clobber it
+    authPort.getSession().then((s) => { if (active && !settled) setSession(s); });
+    const unsub = authPort.onAuthChange((s) => { settled = true; if (active) setSession(s); });
     return () => { active = false; unsub(); };
   }, [authPort]);
 

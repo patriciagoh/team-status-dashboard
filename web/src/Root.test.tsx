@@ -1,6 +1,6 @@
 // web/src/Root.test.tsx
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, act } from "@testing-library/react";
 import { Root } from "./Root";
 import type { AuthPort, Session } from "./auth/AuthPort";
 import roster from "../public/roster.json";
@@ -48,9 +48,9 @@ describe("Root", () => {
     const { port, emit } = fakeAuthPort(null);
     render(<Root authPort={port} />);
     await waitFor(() => expect(screen.getByRole("button", { name: /sign in/i })).toBeInTheDocument());
-    emit({ userId: "u1", email: "a@b.c" });
+    await act(async () => { emit({ userId: "u1", email: "a@b.c" }); });
     await waitFor(() => expect(screen.getByText("Team status")).toBeInTheDocument());
-    emit(null);
+    await act(async () => { emit(null); });
     await waitFor(() => expect(screen.getByRole("button", { name: /sign in/i })).toBeInTheDocument());
   });
 });

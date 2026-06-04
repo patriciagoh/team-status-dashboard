@@ -58,7 +58,7 @@ export function Login({ authPort }: { authPort: AuthPort }) {
         <button
           type="submit" disabled={busy}
           className="font-sans font-semibold text-[13px] px-[16px] py-[10px] rounded-[8px] border-0 cursor-pointer disabled:opacity-60"
-          style={{ background: "var(--matcha)", color: "var(--paper)" }}
+          style={{ background: "var(--matcha)", color: "var(--paper)", outlineColor: "var(--focus)" }}
         >
           {busy ? "Signing in…" : "Sign in"}
         </button>
