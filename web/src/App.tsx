@@ -8,7 +8,7 @@ import { Header } from "./components/Header";
 import { SummaryStrip } from "./components/SummaryStrip";
 import { RosterTable } from "./components/RosterTable";
 
-export default function App({ store }: { store?: RosterStore }) {
+export default function App({ store, onSignOut }: { store?: RosterStore; onSignOut?: () => void }) {
   const [data, setData] = useState<RosterData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,7 +39,7 @@ export default function App({ store }: { store?: RosterStore }) {
   const d = derive(data);
   return (
     <main className="p-[38px_48px_44px]">
-      <Header snapshot={data.snapshot} total={d.total} />
+      <Header snapshot={data.snapshot} total={d.total} onSignOut={onSignOut} />
       {d.total === 0 ? (
         <p className="mt-[26px] font-mono text-[12px] text-muted">No one on the roster yet.</p>
       ) : (
