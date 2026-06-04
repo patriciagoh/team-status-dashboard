@@ -45,9 +45,8 @@ describe("summary strip", () => {
     expect(container.querySelector("canvas")).toBeNull();
   });
 
-  it("header shows the snapshot freshness", () => {
+  it("header shows the synced freshness", () => {
     render(<Header snapshot={(roster as RosterData).snapshot} total={d.total} />);
-    expect(screen.getByText(/Snapshot ·/)).toBeInTheDocument();
-    expect(screen.getByText(/next refresh/)).toBeInTheDocument();
+    expect(screen.getByText(/Synced ·/)).toBeInTheDocument();
   });
 });
