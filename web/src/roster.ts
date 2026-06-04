@@ -34,11 +34,11 @@ function sumOffPlan(c: Record<Category, number>): number {
 export function derive(data: RosterData): Derived {
   const all: Person[] = data.teams.flatMap((t) => t.people);
   const counts = emptyCounts();
-  for (const p of all) counts[p.cat] += 1;
+  for (const p of all) if (p.hasActivity !== false) counts[p.cat] += 1;
 
   const teams: TeamDerived[] = data.teams.map((t) => {
     const tc = emptyCounts();
-    for (const p of t.people) tc[p.cat] += 1;
+    for (const p of t.people) if (p.hasActivity !== false) tc[p.cat] += 1;
     const tally: TallyItem[] = CAT_ORDER
       .filter((k) => tc[k] > 0)
       .map((k) => ({ key: k, label: CATEGORIES[k].label, count: tc[k] }));

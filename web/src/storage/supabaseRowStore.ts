@@ -1,38 +1,38 @@
 // web/src/storage/supabaseRowStore.ts
-import type { RosterData } from "../types";
-import type { RowStore } from "./RosterStore";
+import type { HumanDoc, RowStore } from "./RosterStore";
 import { getSupabaseClient } from "./supabaseClient";
 
 /** Minimal data access used by the row store — testable against a fake. */
 export interface AppDataClient {
-  getData(uid: string): Promise<unknown | null>;
-  putData(uid: string, data: RosterData): Promise<void>;
+  getRow(uid: string): Promise<{ data: unknown; work: unknown } | null>;
+  putHuman(uid: string, human: HumanDoc): Promise<void>;
 }
 
 export function makeSupabaseRowStore(client: AppDataClient, getUid: () => Promise<string>): RowStore {
   return {
     async getRow() {
-      return client.getData(await getUid());
+      return client.getRow(await getUid());
     },
-    async putRow(data) {
-      await client.putData(await getUid(), data);
+    async putHuman(human) {
+      await client.putHuman(await getUid(), human);
     },
   };
 }
 
-/** Live binding: real Supabase client + session uid. Exercised after Phase 2 auth. */
+/** Live binding: reads data+work columns; writes ONLY the data column (pipeline owns work). */
 export async function createSupabaseRowStore(): Promise<RowStore> {
   const supabase = await getSupabaseClient();
   const client: AppDataClient = {
-    async getData(uid) {
-      const { data, error } = await supabase.from("app_data").select("data").eq("owner", uid).maybeSingle();
+    async getRow(uid) {
+      const { data, error } = await supabase.from("app_data").select("data, work").eq("owner", uid).maybeSingle();
       if (error) throw error;
-      return data ? (data as { data: unknown }).data : null;
+      return data ? { data: (data as { data: unknown }).data, work: (data as { work: unknown }).work } : null;
     },
-    async putData(uid, value) {
+    async putHuman(uid, human) {
+      // Upsert only the data column; on an existing row Postgres leaves `work` untouched.
       const { error } = await supabase
         .from("app_data")
-        .upsert({ owner: uid, data: value, updated_at: new Date().toISOString() });
+        .upsert({ owner: uid, data: human, updated_at: new Date().toISOString() });
       if (error) throw error;
     },
   };

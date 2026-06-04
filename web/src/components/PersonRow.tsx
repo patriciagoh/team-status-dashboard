@@ -29,7 +29,7 @@ export function PersonRow({ person, idx, last }: { person: Person; idx: number; 
           <span className="font-mono text-[10px] leading-none text-muted">{person.role}</span>
         </span>
         <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"><WorkingOn person={person} /></span>
-        <span><CategoryChip cat={person.cat} /></span>
+        <span>{person.hasActivity === false ? <span className="font-mono text-[12px] text-muted">—</span> : <CategoryChip cat={person.cat} />}</span>
         <span className="min-w-0"><SinceNote person={person} /></span>
         <span className="flex items-center justify-end gap-[8px]">
           <span className="font-mono font-bold text-[11px] leading-none text-matcha-deep text-right">{person.ticket || "—"}</span>

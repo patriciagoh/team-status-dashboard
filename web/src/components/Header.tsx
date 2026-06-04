@@ -1,7 +1,7 @@
 import type { Snapshot } from "../types";
 
 export function Header({ snapshot, total, onSignOut }: { snapshot: Snapshot; total: number; onSignOut?: () => void }) {
-  const day = snapshot.day.split(",")[0];
+  const synced = snapshot.day.trim();
   return (
     <header className="flex justify-between items-center">
       <div className="flex items-baseline gap-[12px]">
@@ -16,18 +16,13 @@ export function Header({ snapshot, total, onSignOut }: { snapshot: Snapshot; tot
         <span className="inline-flex items-center gap-[7px]">
           <span className="tsd-pulse w-[7px] h-[7px] rounded-full" style={{ background: "var(--matcha)" }} aria-hidden="true" />
           <span className="font-mono font-bold text-[12px] leading-none text-ink-2">
-            Snapshot · {day} {snapshot.time}
+            {synced ? `Synced · ${synced}` : "Not yet synced"}
           </span>
         </span>
-        <span className="font-mono text-[12px] leading-none text-muted">
-          next refresh {snapshot.next}
-        </span>
         {onSignOut && (
-          <button
-            type="button" onClick={onSignOut}
+          <button type="button" onClick={onSignOut}
             className="font-mono text-[12px] leading-none text-muted hover:text-ink-2 underline underline-offset-2 border-0 bg-transparent cursor-pointer p-0"
-            style={{ outlineColor: "var(--focus)" }}
-          >
+            style={{ outlineColor: "var(--focus)" }}>
             Sign out
           </button>
         )}

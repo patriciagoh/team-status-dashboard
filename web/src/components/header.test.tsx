@@ -22,3 +22,15 @@ describe("Header sign-out", () => {
     expect(screen.queryByRole("button", { name: /sign out/i })).toBeNull();
   });
 });
+
+describe("Header synced stamp", () => {
+  it("shows 'Synced · …' when the snapshot day is set", () => {
+    render(<Header snapshot={snapshot} total={3} />);
+    expect(screen.getByText(/Synced ·/)).toBeInTheDocument();
+  });
+
+  it("shows 'Not yet synced' when the snapshot day is empty", () => {
+    render(<Header snapshot={{ day: "", time: "", prev: "", next: "", slackConnected: false }} total={0} />);
+    expect(screen.getByText(/Not yet synced/)).toBeInTheDocument();
+  });
+});

@@ -1,14 +1,20 @@
 // web/src/storage/RosterStore.ts
-import type { RosterData } from "../types";
+import type { Correction, Engineer, RosterDoc } from "../types";
 
-/** App-facing persistence seam: load/save the whole roster document. */
+/** App-facing seam: load the full doc (human + pipeline work); save persists ONLY the human side. */
 export interface RosterStore {
-  load(): Promise<RosterData>;
-  save(data: RosterData): Promise<void>;
+  load(): Promise<RosterDoc>;
+  save(doc: RosterDoc): Promise<void>;
 }
 
-/** Adapter-internal sub-seam: raw row I/O. `getRow` returns null when no row exists yet. */
+/** The human-owned slice the app may persist. */
+export interface HumanDoc {
+  engineers: Engineer[];
+  corrections: Record<string, Correction>;
+}
+
+/** Adapter sub-seam: read both columns; write only the human column. */
 export interface RowStore {
-  getRow(): Promise<unknown | null>;
-  putRow(data: RosterData): Promise<void>;
+  getRow(): Promise<{ data: unknown; work: unknown } | null>; // null = no row yet
+  putHuman(human: HumanDoc): Promise<void>;
 }

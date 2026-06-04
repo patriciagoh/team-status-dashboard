@@ -37,7 +37,8 @@ export function ExpandedPanel({ person, id }: { person: Person; id?: string }) {
           <button
             type="button"
             onClick={onEditPerson ? () => onEditPerson(person.id) : undefined}
-            className="tsd-focus mt-[14px] font-sans font-semibold text-[12px] leading-none text-matcha-deep bg-transparent border-none p-0 cursor-pointer inline-flex items-center gap-[5px]"
+            disabled={!onEditPerson}
+            className="tsd-focus mt-[14px] font-sans font-semibold text-[12px] leading-none text-matcha-deep bg-transparent border-none p-0 cursor-pointer inline-flex items-center gap-[5px] disabled:opacity-60 disabled:cursor-default"
           >
             Correct {first}'s row
             <span aria-hidden="true">→</span>

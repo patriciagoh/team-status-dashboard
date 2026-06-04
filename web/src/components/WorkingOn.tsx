@@ -1,6 +1,9 @@
 import type { Person } from "../types";
 
 export function WorkingOn({ person }: { person: Person }) {
+  if (person.hasActivity === false) {
+    return <span className="font-mono text-[12px] text-muted italic">no tracked activity</span>;
+  }
   const low = person.conf === "low";
   if (low) {
     return (

@@ -42,4 +42,9 @@ describe("leaf components", () => {
     expect(screen.getByText("Steady work")).toBeInTheDocument();
     expect(screen.queryByText("~", { exact: false })).toBeNull();
   });
+
+  it("WorkingOn shows 'no tracked activity' when hasActivity is false", () => {
+    render(<WorkingOn person={{ ...base, hasActivity: false }} />);
+    expect(screen.getByText(/no tracked activity/)).toBeInTheDocument();
+  });
 });

@@ -1,9 +1,12 @@
 // web/src/App.tsx
 import { useState } from "react";
 import { derive } from "./roster";
+import { mergeRoster } from "./roster/merge";
 import type { RosterStore } from "./storage/RosterStore";
 import { useRoster } from "./useRoster";
-import { addPerson, removePerson, updatePerson } from "./roster/mutations";
+import { addEngineer, updateEngineer, removeEngineer, setCorrection, clearCorrection } from "./roster/mutations";
+import type { EngineerInput } from "./roster/mutations";
+import type { Correction } from "./types";
 import { RosterActionsContext } from "./rosterActions";
 import { Header } from "./components/Header";
 import { SummaryStrip } from "./components/SummaryStrip";
@@ -22,8 +25,12 @@ function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
   );
 }
 
+function hasSignal(c: Correction): boolean {
+  return c.cat !== undefined || (c.note ?? "") !== "";
+}
+
 export default function App({ store, onSignOut, editable = false }: { store?: RosterStore; onSignOut?: () => void; editable?: boolean }) {
-  const { roster, error, commit } = useRoster(store);
+  const { doc, error, commit } = useRoster(store);
   const [view, setView] = useState<View>({ mode: "list" });
   const toList = () => setView({ mode: "list" });
 
@@ -34,26 +41,34 @@ export default function App({ store, onSignOut, editable = false }: { store?: Ro
       </div>
     );
   }
-  if (!roster) {
+  if (!doc) {
     return <div className="p-[38px_48px_44px] font-mono text-[12px] text-muted">Loading…</div>;
   }
 
-  const d = derive(roster);
-  const teamNames = roster.teams.map((t) => t.name);
+  const display = mergeRoster(doc);
+  const d = derive(display);
+  const teamNames = [...new Set(doc.engineers.map((e) => e.team))];
 
   if (editable && view.mode === "add") {
     return (
       <PersonForm teams={teamNames} onCancel={toList}
-        onSave={(input) => commit((r) => addPerson(r, input)).then(toList)} />
+        onSave={(input: EngineerInput) => commit((dd) => addEngineer(dd, input)).then(toList)} />
     );
   }
 
-  const editing = editable && view.mode === "edit" ? d.all.find((p) => p.id === view.id) : undefined;
-  if (editing) {
+  const editingEng = editable && view.mode === "edit" ? doc.engineers.find((e) => e.id === view.id) : undefined;
+  if (editingEng) {
+    const id = editingEng.id;
     return (
-      <PersonForm initial={editing} teams={teamNames} onCancel={toList}
-        onSave={(input) => commit((r) => updatePerson(r, editing.id, input)).then(toList)}
-        onDelete={() => commit((r) => removePerson(r, editing.id)).then(toList)} />
+      <PersonForm
+        initial={{ engineer: editingEng, correction: doc.corrections[id], work: doc.work.states[id] }}
+        teams={teamNames} onCancel={toList}
+        onSave={(input, correction) => commit((dd) => {
+          const updated = updateEngineer(dd, id, input);
+          return hasSignal(correction) ? setCorrection(updated, id, correction) : clearCorrection(updated, id);
+        }).then(toList)}
+        onDelete={() => commit((dd) => removeEngineer(dd, id)).then(toList)}
+      />
     );
   }
 
@@ -61,17 +76,17 @@ export default function App({ store, onSignOut, editable = false }: { store?: Ro
   return (
     <RosterActionsContext.Provider value={actions}>
       <main className="p-[38px_48px_44px]">
-        <Header snapshot={roster.snapshot} total={d.total} onSignOut={onSignOut} />
+        <Header snapshot={display.snapshot} total={d.total} onSignOut={onSignOut} />
         {d.total === 0 ? (
           <div className="mt-[26px] flex flex-col items-start gap-[14px]">
             <p className="font-mono text-[12px] text-muted">No one on the roster yet.</p>
-            {editable && <AddButton label="Add your first person" onClick={() => setView({ mode: "add" })} />}
+            {editable && <AddButton label="Add your first engineer" onClick={() => setView({ mode: "add" })} />}
           </div>
         ) : (
           <>
             {editable && (
               <div className="mt-[18px]">
-                <AddButton label="Add person" onClick={() => setView({ mode: "add" })} />
+                <AddButton label="Add engineer" onClick={() => setView({ mode: "add" })} />
               </div>
             )}
             <SummaryStrip d={d} />

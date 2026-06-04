@@ -20,6 +20,8 @@ export interface Person {
   ticket: string | null;
   since: string | null;
   detail: PersonDetail;
+  /** Display flag: false when an engineer has no pulled work state and no correction. Optional; undefined ≡ true. */
+  hasActivity?: boolean;
 }
 
 export interface Team {
@@ -39,4 +41,45 @@ export interface Snapshot {
 export interface RosterData {
   teams: Team[];
   snapshot: Snapshot;
+}
+
+// --- Phase 3b: stored document (config / pulled work / corrections) ---
+
+/** Human-owned roster config. */
+export interface Engineer {
+  id: string;
+  name: string;
+  role: string;
+  team: string;
+  linearUserId: string | null; // mapping → Linear Member.id
+  email: string | null;        // mapping → Slack/Linear by email
+}
+
+/** Human-owned override of a pulled row ("Correct my row"). */
+export interface Correction {
+  cat?: Category;
+  note?: string;
+}
+
+/** Pipeline-owned, pulled & classified work for one engineer (read-only in the app). */
+export interface WorkState {
+  cat: Category;
+  conf: Confidence;
+  what: string;
+  ticket: string | null;
+  since: string | null;
+  detail: PersonDetail;
+}
+
+/** Pipeline-owned snapshot, keyed by engineer id. */
+export interface WorkSnapshot {
+  syncedAt: string | null;
+  states: Record<string, WorkState>;
+}
+
+/** The stored document: human side (engineers + corrections) + pipeline side (work). */
+export interface RosterDoc {
+  engineers: Engineer[];
+  corrections: Record<string, Correction>;
+  work: WorkSnapshot;
 }
