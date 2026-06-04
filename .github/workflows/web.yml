@@ -34,6 +34,10 @@ jobs:
       - run: npm test
       - run: npm run guardrail
       - run: npm run build
+        env:
+          # Pin the demo build so the dead `supabase` branch (and the Supabase
+          # SDK) is eliminated from the published Pages bundle.
+          VITE_BACKEND: local
       # Only stage the Pages artifact when we're actually going to deploy.
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
