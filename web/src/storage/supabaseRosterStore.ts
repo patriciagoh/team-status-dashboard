@@ -1,20 +1,20 @@
 // web/src/storage/supabaseRosterStore.ts
 import type { RosterStore, RowStore } from "./RosterStore";
-import { emptyRoster, sanitizeRoster } from "./sanitize";
+import { emptyDoc, sanitizeDoc } from "./sanitize";
 
 export function makeSupabaseRosterStore(rowStore: RowStore): RosterStore {
   return {
     async load() {
-      const raw = await rowStore.getRow();
-      if (raw === null) {
-        const empty = emptyRoster();
-        await rowStore.putRow(empty);
-        return empty;
+      const row = await rowStore.getRow();
+      if (row === null) {
+        const doc = emptyDoc();
+        await rowStore.putHuman({ engineers: doc.engineers, corrections: doc.corrections });
+        return doc;
       }
-      return sanitizeRoster(raw);
+      return sanitizeDoc(row.data, row.work);
     },
-    async save(data) {
-      await rowStore.putRow(data);
+    async save(doc) {
+      await rowStore.putHuman({ engineers: doc.engineers, corrections: doc.corrections });
     },
   };
 }

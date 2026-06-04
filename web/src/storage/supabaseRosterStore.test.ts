@@ -1,62 +1,55 @@
 // web/src/storage/supabaseRosterStore.test.ts
 import { describe, it, expect } from "vitest";
 import { makeSupabaseRosterStore } from "./supabaseRosterStore";
-import type { RowStore } from "./RosterStore";
-import type { RosterData } from "../types";
+import type { HumanDoc, RowStore } from "./RosterStore";
+import type { RosterDoc } from "../types";
 
 class FakeRowStore implements RowStore {
-  row: unknown | null;
-  puts = 0;
-  constructor(initial: unknown | null = null) { this.row = initial; }
+  row: { data: unknown; work: unknown } | null;
+  puts: HumanDoc[] = [];
+  constructor(initial: { data: unknown; work: unknown } | null = null) { this.row = initial; }
   async getRow() { return this.row; }
-  async putRow(d: RosterData) { this.row = d; this.puts++; }
+  async putHuman(h: HumanDoc) { this.puts.push(h); this.row = { data: h, work: this.row?.work ?? {} }; }
 }
 
-const validRow = {
-  teams: [{ name: "T", lead: "L", people: [
-    { id: "sv1", name: "A", initials: "A", role: "Eng", team: "T", cat: "planned", conf: "high",
-      what: "x", ticket: null, since: null, detail: { tickets: [], note: "" } },
-  ] }],
-  snapshot: { day: "d", time: "t", prev: "p", next: "n", slackConnected: false },
+const newRow = {
+  data: { engineers: [{ id: "e1", name: "Maya R.", role: "EM", team: "Platform" }], corrections: {} },
+  work: { syncedAt: "t", states: { e1: { cat: "incident", conf: "high", what: "x", ticket: null, since: null, detail: { tickets: [], note: "" } } } },
 };
 
 describe("makeSupabaseRosterStore", () => {
-  it("bootstraps an empty roster and writes it once when the row is null", async () => {
+  it("bootstraps an empty doc (writing only the human side) when the row is null", async () => {
     const fake = new FakeRowStore(null);
-    const store = makeSupabaseRosterStore(fake);
-    const data = await store.load();
-    expect(data.teams).toEqual([]);
-    expect(fake.puts).toBe(1);
+    const doc = await makeSupabaseRosterStore(fake).load();
+    expect(doc.engineers).toEqual([]);
+    expect(fake.puts).toHaveLength(1);
   });
 
-  it("does not rewrite on a subsequent load (no reseed loop)", async () => {
+  it("does not rewrite on a subsequent load", async () => {
     const fake = new FakeRowStore(null);
     const store = makeSupabaseRosterStore(fake);
     await store.load();
     await store.load();
-    expect(fake.puts).toBe(1);
+    expect(fake.puts).toHaveLength(1);
   });
 
-  it("returns the sanitized existing row without writing", async () => {
-    const fake = new FakeRowStore(validRow);
-    const store = makeSupabaseRosterStore(fake);
-    const data = await store.load();
-    expect(data.teams[0].people[0].name).toBe("A");
-    expect(fake.puts).toBe(0);
+  it("merges data + work columns into a RosterDoc", async () => {
+    const doc = await makeSupabaseRosterStore(new FakeRowStore(newRow)).load();
+    expect(doc.engineers[0].name).toBe("Maya R.");
+    expect(doc.work.states.e1.cat).toBe("incident");
   });
 
-  it("throws on an unrecognized stored blob (never overwrites)", async () => {
-    const fake = new FakeRowStore({ nope: 1 });
-    const store = makeSupabaseRosterStore(fake);
-    await expect(store.load()).rejects.toThrow();
-    expect(fake.puts).toBe(0);
+  it("throws on an unrecognized data column (never overwrites)", async () => {
+    const fake = new FakeRowStore({ data: { nope: 1 }, work: {} });
+    await expect(makeSupabaseRosterStore(fake).load()).rejects.toThrow();
+    expect(fake.puts).toHaveLength(0);
   });
 
-  it("save writes through to the row store", async () => {
-    const fake = new FakeRowStore(validRow);
+  it("save persists only the human side", async () => {
+    const fake = new FakeRowStore(newRow);
     const store = makeSupabaseRosterStore(fake);
-    await store.save(validRow as RosterData);
-    expect(fake.puts).toBe(1);
-    expect(fake.row).toEqual(validRow);
+    const doc: RosterDoc = { engineers: [{ id: "e9", name: "X", role: "", team: "T", linearUserId: null, email: null }], corrections: {}, work: { syncedAt: "later", states: {} } };
+    await store.save(doc);
+    expect(fake.puts[0]).toEqual({ engineers: doc.engineers, corrections: {} }); // work NOT written
   });
 });
