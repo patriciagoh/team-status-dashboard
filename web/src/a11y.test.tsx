@@ -3,10 +3,11 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RosterTable } from "./components/RosterTable";
 import { derive } from "./roster";
+import { mergeRoster } from "./roster/merge";
 import roster from "../public/roster.json";
-import type { RosterData } from "./types";
+import type { RosterDoc } from "./types";
 
-const d = derive(roster as RosterData);
+const d = derive(mergeRoster(roster as RosterDoc));
 
 describe("accessibility", () => {
   it("each category is conveyed by a text label, not color alone", () => {

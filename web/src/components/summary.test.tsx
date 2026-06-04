@@ -3,10 +3,13 @@ import { render, screen } from "@testing-library/react";
 import { SummaryStrip } from "./SummaryStrip";
 import { Header } from "./Header";
 import { derive } from "../roster";
+import { mergeRoster } from "../roster/merge";
 import roster from "../../public/roster.json";
-import type { Person, RosterData } from "../types";
+import type { Person, RosterData, RosterDoc, Snapshot } from "../types";
 
-const d = derive(roster as RosterData);
+const display = mergeRoster(roster as RosterDoc);
+const d = derive(display);
+const blankSnapshot: Snapshot = { day: "", time: "", prev: "", next: "", slackConnected: false };
 
 function person(cat: Person["cat"]): Person {
   return {
@@ -27,7 +30,7 @@ describe("summary strip", () => {
   it("'off plan' tile counts incident + unplanned (not unplanned alone)", () => {
     // 2 incidents + 1 unplanned → off plan = 3, a value unplanned alone can't produce
     const synthetic = derive({
-      snapshot: roster.snapshot,
+      snapshot: blankSnapshot,
       teams: [{ name: "T", lead: "X Y", people: [
         person("incident"), person("incident"), person("unplanned"), person("planned"),
       ] }],
@@ -46,7 +49,7 @@ describe("summary strip", () => {
   });
 
   it("header shows the synced freshness", () => {
-    render(<Header snapshot={(roster as RosterData).snapshot} total={d.total} />);
+    render(<Header snapshot={display.snapshot} total={d.total} />);
     expect(screen.getByText(/Synced ·/)).toBeInTheDocument();
   });
 });
