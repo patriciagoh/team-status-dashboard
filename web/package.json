@@ -13,6 +13,9 @@
     "guardrail": "find src -type f \\( -name '*.ts' -o -name '*.tsx' -o -name '*.css' \\) ! -name 'tokens.categories.css' -print0 | xargs -0 node node_modules/matcha-oat-design-system/scripts/check-no-raw-values.mjs"
   },
   "dependencies": {
+    "@fontsource/hanken-grotesk": "5.2.8",
+    "@fontsource/newsreader": "5.2.10",
+    "@fontsource/space-mono": "5.2.9",
     "@supabase/supabase-js": "2.107.0",
     "matcha-oat-design-system": "github:patriciagoh/matcha-oat-design-system",
     "react": "19.2.7",
