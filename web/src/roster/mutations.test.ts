@@ -70,6 +70,15 @@ describe("updatePerson", () => {
     expect(r2.teams[0].people[0].id).toBe(id);
   });
 
+  it("moves a person into an existing team (kept member intact, source pruned)", () => {
+    // Maya alone in Platform; Priya in Payments. Move Maya → Payments.
+    const r1 = addPerson(addPerson(empty, input()), input({ name: "Priya N.", team: "Payments" }));
+    const mayaId = r1.teams.find((t) => t.name === "Platform")!.people[0].id;
+    const r2 = updatePerson(r1, mayaId, input({ team: "Payments" }));
+    expect(r2.teams.map((t) => t.name)).toEqual(["Payments"]); // Platform pruned
+    expect(r2.teams[0].people.map((p) => p.name)).toEqual(["Priya N.", "Maya R."]); // existing member kept
+  });
+
   it("returns the roster unchanged when the id is unknown", () => {
     const r1 = addPerson(empty, input());
     expect(updatePerson(r1, "nope", input())).toBe(r1);
