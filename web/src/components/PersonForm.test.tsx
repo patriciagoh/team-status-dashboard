@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PersonForm } from "./PersonForm";
 import type { Person } from "../types";
+import type { PersonInput } from "../roster/mutations";
 
 const person: Person = {
   id: "p1", name: "Maya R.", initials: "MR", role: "EM", team: "Platform",
@@ -12,7 +13,7 @@ const person: Person = {
 
 describe("PersonForm", () => {
   it("renders labelled fields and submits parsed input (open items split into a list)", async () => {
-    const onSave = vi.fn(async () => {});
+    const onSave = vi.fn<(input: PersonInput) => Promise<void>>(async () => {});
     render(<PersonForm teams={["Platform"]} onSave={onSave} onCancel={() => {}} />);
     await userEvent.type(screen.getByLabelText("Name"), "Priya N.");
     await userEvent.type(screen.getByLabelText("Team"), "Platform");

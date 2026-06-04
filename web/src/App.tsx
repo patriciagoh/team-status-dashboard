@@ -1,29 +1,31 @@
 // web/src/App.tsx
-import { useEffect, useState } from "react";
-import type { RosterData } from "./types";
+import { useState } from "react";
 import { derive } from "./roster";
 import type { RosterStore } from "./storage/RosterStore";
-import { createRosterStore } from "./storage/createRosterStore";
+import { useRoster } from "./useRoster";
+import { addPerson, removePerson, updatePerson } from "./roster/mutations";
+import { RosterActionsContext } from "./rosterActions";
 import { Header } from "./components/Header";
 import { SummaryStrip } from "./components/SummaryStrip";
 import { RosterTable } from "./components/RosterTable";
+import { PersonForm } from "./components/PersonForm";
 
-export default function App({ store, onSignOut }: { store?: RosterStore; onSignOut?: () => void }) {
-  const [data, setData] = useState<RosterData | null>(null);
-  const [error, setError] = useState<string | null>(null);
+type View = { mode: "list" } | { mode: "add" } | { mode: "edit"; id: string };
 
-  useEffect(() => {
-    let cancelled = false;
-    const ready = store ? Promise.resolve(store) : createRosterStore();
-    ready
-      .then((s) => s.load())
-      // Clear any stale error/data on resolution so a changed store prop can't
-      // leave a previous error or rows stuck on screen (success clears error;
-      // the catch below clears data).
-      .then((d) => { if (!cancelled) { setData(d); setError(null); } })
-      .catch((e) => { if (!cancelled) { setError(String(e)); setData(null); } });
-    return () => { cancelled = true; };
-  }, [store]);
+function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick}
+      className="tsd-focus font-sans font-semibold text-[12px] px-[14px] py-[8px] rounded-[8px] border-0 cursor-pointer"
+      style={{ background: "var(--matcha)", color: "var(--paper)", outlineColor: "var(--focus)" }}>
+      {label}
+    </button>
+  );
+}
+
+export default function App({ store, onSignOut, editable = false }: { store?: RosterStore; onSignOut?: () => void; editable?: boolean }) {
+  const { roster, error, commit } = useRoster(store);
+  const [view, setView] = useState<View>({ mode: "list" });
+  const toList = () => setView({ mode: "list" });
 
   if (error) {
     return (
@@ -32,22 +34,51 @@ export default function App({ store, onSignOut }: { store?: RosterStore; onSignO
       </div>
     );
   }
-  if (!data) {
+  if (!roster) {
     return <div className="p-[38px_48px_44px] font-mono text-[12px] text-muted">Loading…</div>;
   }
 
-  const d = derive(data);
+  const d = derive(roster);
+  const teamNames = roster.teams.map((t) => t.name);
+
+  if (editable && view.mode === "add") {
+    return (
+      <PersonForm teams={teamNames} onCancel={toList}
+        onSave={(input) => commit((r) => addPerson(r, input)).then(toList)} />
+    );
+  }
+
+  const editing = editable && view.mode === "edit" ? d.all.find((p) => p.id === view.id) : undefined;
+  if (editing) {
+    return (
+      <PersonForm initial={editing} teams={teamNames} onCancel={toList}
+        onSave={(input) => commit((r) => updatePerson(r, editing.id, input)).then(toList)}
+        onDelete={() => commit((r) => removePerson(r, editing.id)).then(toList)} />
+    );
+  }
+
+  const actions = editable ? { onEditPerson: (id: string) => setView({ mode: "edit", id }) } : {};
   return (
-    <main className="p-[38px_48px_44px]">
-      <Header snapshot={data.snapshot} total={d.total} onSignOut={onSignOut} />
-      {d.total === 0 ? (
-        <p className="mt-[26px] font-mono text-[12px] text-muted">No one on the roster yet.</p>
-      ) : (
-        <>
-          <SummaryStrip d={d} />
-          <RosterTable d={d} />
-        </>
-      )}
-    </main>
+    <RosterActionsContext.Provider value={actions}>
+      <main className="p-[38px_48px_44px]">
+        <Header snapshot={roster.snapshot} total={d.total} onSignOut={onSignOut} />
+        {d.total === 0 ? (
+          <div className="mt-[26px] flex flex-col items-start gap-[14px]">
+            <p className="font-mono text-[12px] text-muted">No one on the roster yet.</p>
+            {editable && <AddButton label="Add your first person" onClick={() => setView({ mode: "add" })} />}
+          </div>
+        ) : (
+          <>
+            {editable && (
+              <div className="mt-[18px]">
+                <AddButton label="Add person" onClick={() => setView({ mode: "add" })} />
+              </div>
+            )}
+            <SummaryStrip d={d} />
+            <RosterTable d={d} />
+          </>
+        )}
+      </main>
+    </RosterActionsContext.Provider>
   );
 }
