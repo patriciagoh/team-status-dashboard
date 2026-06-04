@@ -2,7 +2,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "matcha-oat-design-system/tokens.css";
-import "matcha-oat-design-system/fonts.css";
+// Self-hosted fonts (no Google Fonts @import → no visitor-IP leak). Only the
+// weights/styles the Matcha Oat tokens use; Sacramento (--script) is unused.
+import "@fontsource/newsreader/400.css";
+import "@fontsource/newsreader/500.css";
+import "@fontsource/newsreader/600.css";
+import "@fontsource/newsreader/400-italic.css";
+import "@fontsource/newsreader/500-italic.css";
+import "@fontsource/hanken-grotesk/400.css";
+import "@fontsource/hanken-grotesk/500.css";
+import "@fontsource/hanken-grotesk/600.css";
+import "@fontsource/hanken-grotesk/700.css";
+import "@fontsource/space-mono/400.css";
+import "@fontsource/space-mono/700.css";
 import "./tokens.categories.css";
 import "./index.css";
 import { Root } from "./Root";
