@@ -1,57 +1,52 @@
+// web/src/components/PersonForm.tsx
 import { useId, useState, type FormEvent } from "react";
-import type { Person } from "../types";
-import type { PersonInput } from "../roster/mutations";
+import type { Category, Correction, Engineer, WorkState } from "../types";
+import type { EngineerInput } from "../roster/mutations";
 import { CAT_ORDER, CATEGORIES } from "../categories";
 
-const fieldClass =
-  "font-mono text-[13px] text-ink px-[12px] py-[9px] rounded-[8px] border border-line-2 bg-transparent";
+const fieldClass = "font-mono text-[13px] text-ink px-[12px] py-[9px] rounded-[8px] border border-line-2 bg-transparent";
 const labelClass = "flex flex-col gap-[6px] font-mono text-[12px] text-ink-2";
+
+export interface PersonFormInitial { engineer: Engineer; correction?: Correction; work?: WorkState; }
 
 export function PersonForm({
   initial, teams, onSave, onCancel, onDelete,
 }: {
-  initial?: Person;
+  initial?: PersonFormInitial;
   teams: string[];
-  onSave: (input: PersonInput) => Promise<void>;
+  onSave: (input: EngineerInput, correction: Correction) => Promise<void>;
   onCancel: () => void;
   onDelete?: () => Promise<void>;
 }) {
   const listId = useId();
-  const [name, setName] = useState(initial?.name ?? "");
-  const [role, setRole] = useState(initial?.role ?? "");
-  const [team, setTeam] = useState(initial?.team ?? "");
-  const [cat, setCat] = useState(initial?.cat ?? "planned");
-  const [conf, setConf] = useState(initial?.conf ?? "high");
-  const [what, setWhat] = useState(initial?.what ?? "");
-  const [ticket, setTicket] = useState(initial?.ticket ?? "");
-  const [since, setSince] = useState(initial?.since ?? "");
-  const [openItems, setOpenItems] = useState((initial?.detail.tickets ?? []).join("\n"));
-  const [note, setNote] = useState(initial?.detail.note ?? "");
+  const e = initial?.engineer;
+  const [name, setName] = useState(e?.name ?? "");
+  const [role, setRole] = useState(e?.role ?? "");
+  const [team, setTeam] = useState(e?.team ?? "");
+  const [linearUserId, setLinearUserId] = useState(e?.linearUserId ?? "");
+  const [email, setEmail] = useState(e?.email ?? "");
+  const [catOverride, setCatOverride] = useState<string>(initial?.correction?.cat ?? "");
+  const [note, setNote] = useState(initial?.correction?.note ?? "");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!name.trim() || !team.trim()) {
-      setError("Name and team are required.");
-      return;
-    }
-    const input: PersonInput = {
+  async function onSubmit(ev: FormEvent) {
+    ev.preventDefault();
+    if (!name.trim() || !team.trim()) { setError("Name and team are required."); return; }
+    const input: EngineerInput = {
       name: name.trim(), role: role.trim(), team: team.trim(),
-      cat, conf, what: what.trim(),
-      ticket: ticket.trim() || null,
-      since: since.trim() || null,
-      detail: {
-        tickets: openItems.split("\n").map((s) => s.trim()).filter(Boolean),
-        note: note.trim(),
-      },
+      linearUserId: linearUserId.trim() || null,
+      email: email.trim() || null,
     };
+    const correction: Correction = {};
+    if (catOverride) correction.cat = catOverride as Category;
+    if (note.trim()) correction.note = note.trim();
     setError(null);
     setBusy(true);
     try {
-      await onSave(input);
-      // success: the parent navigates back to the list (this form unmounts)
+      await onSave(input, correction);
+      // success: parent navigates away (this form unmounts)
     } catch {
       setError("Couldn't save. Check your connection and try again.");
       setBusy(false);
@@ -62,69 +57,59 @@ export function PersonForm({
     if (!onDelete) return;
     if (!confirmDelete) { setConfirmDelete(true); return; }
     setBusy(true);
-    try {
-      await onDelete();
-    } catch {
-      setError("Couldn't delete. Check your connection and try again.");
-      setBusy(false);
-      setConfirmDelete(false);
-    }
+    try { await onDelete(); }
+    catch { setError("Couldn't delete. Check your connection and try again."); setBusy(false); setConfirmDelete(false); }
   }
 
   return (
     <main className="p-[38px_48px_44px] max-w-[640px]">
       <h1 className="font-serif font-normal text-[24px] leading-none tracking-[-0.02em] text-ink m-0">
-        {initial ? "Edit person" : "Add person"}
+        {initial ? "Edit engineer" : "Add engineer"}
       </h1>
       <form onSubmit={onSubmit} className="mt-[24px] flex flex-col gap-[16px]">
         <label className={labelClass}>
           Name
-          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={name} onChange={(e) => setName(e.target.value)} aria-required="true" />
+          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={name} onChange={(ev) => setName(ev.target.value)} aria-required="true" />
         </label>
         <label className={labelClass}>
           Role
-          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={role} onChange={(e) => setRole(e.target.value)} />
+          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={role} onChange={(ev) => setRole(ev.target.value)} />
         </label>
         <label className={labelClass}>
           Team
-          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={team} onChange={(e) => setTeam(e.target.value)} list={listId} aria-required="true" />
-          <datalist id={listId}>
-            {teams.map((t) => <option key={t} value={t} />)}
-          </datalist>
+          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={team} onChange={(ev) => setTeam(ev.target.value)} list={listId} aria-required="true" />
+          <datalist id={listId}>{teams.map((t) => <option key={t} value={t} />)}</datalist>
         </label>
         <label className={labelClass}>
-          Category
-          <select className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={cat} onChange={(e) => setCat(e.target.value as typeof cat)}>
-            {CAT_ORDER.map((k) => <option key={k} value={k}>{CATEGORIES[k].label}</option>)}
-          </select>
+          Linear user id
+          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={linearUserId} onChange={(ev) => setLinearUserId(ev.target.value)} />
         </label>
         <label className={labelClass}>
-          Confidence
-          <select className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={conf} onChange={(e) => setConf(e.target.value as typeof conf)}>
-            <option value="high">High</option>
-            <option value="low">Low (inferred)</option>
-          </select>
+          Email
+          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={email} onChange={(ev) => setEmail(ev.target.value)} />
         </label>
-        <label className={labelClass}>
-          Working on
-          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={what} onChange={(e) => setWhat(e.target.value)} />
-        </label>
-        <label className={labelClass}>
-          Ticket
-          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={ticket} onChange={(e) => setTicket(e.target.value)} />
-        </label>
-        <label className={labelClass}>
-          Since note
-          <input className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={since} onChange={(e) => setSince(e.target.value)} />
-        </label>
-        <label className={labelClass}>
-          Open items
-          <textarea className={fieldClass} style={{ outlineColor: "var(--focus)" }} rows={3} value={openItems} onChange={(e) => setOpenItems(e.target.value)} />
-        </label>
-        <label className={labelClass}>
-          Why note
-          <textarea className={fieldClass} style={{ outlineColor: "var(--focus)" }} rows={3} value={note} onChange={(e) => setNote(e.target.value)} />
-        </label>
+
+        {initial && (
+          <>
+            <div className="mt-[6px] rounded-sm px-[14px] py-[11px] bg-oat">
+              <div className="font-sans font-semibold text-[10px] leading-none tracking-[0.13em] uppercase text-muted mb-[6px]">Current work (pulled, read-only)</div>
+              <div className="font-mono text-[12px] text-ink-2">
+                {initial.work ? `${CATEGORIES[initial.work.cat].label} · ${initial.work.what || "—"}` : "no tracked activity yet"}
+              </div>
+            </div>
+            <label className={labelClass}>
+              Category override
+              <select className={fieldClass} style={{ outlineColor: "var(--focus)" }} value={catOverride} onChange={(ev) => setCatOverride(ev.target.value)}>
+                <option value="">— none —</option>
+                {CAT_ORDER.map((k) => <option key={k} value={k}>{CATEGORIES[k].label}</option>)}
+              </select>
+            </label>
+            <label className={labelClass}>
+              Correction note
+              <textarea className={fieldClass} style={{ outlineColor: "var(--focus)" }} rows={3} value={note} onChange={(ev) => setNote(ev.target.value)} />
+            </label>
+          </>
+        )}
 
         {error && <p role="alert" className="font-mono text-[12px] m-0" style={{ color: "var(--rust-deep)" }}>{error}</p>}
 
